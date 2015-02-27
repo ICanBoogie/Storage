@@ -54,7 +54,7 @@ class APCStorage implements StorageInterface
 	 */
 	public function clear()
 	{
-		apc_clear_cache();
+		apc_clear_cache('user');
 	}
 
 	/**
