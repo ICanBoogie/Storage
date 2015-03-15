@@ -20,7 +20,7 @@ autoload: vendor
 test: vendor
 	@phpunit
 
-doc: vendor
+test-coverage: vendor
 	@mkdir -p build/coverage
 	@phpunit --coverage-html build/coverage
 

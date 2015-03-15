@@ -14,7 +14,7 @@ namespace ICanBoogie\Storage;
 /**
  * A storage using the file system.
  */
-class FileStorage implements \ArrayAccess, \IteratorAggregate, Storage
+class FileStorage implements Storage, \ArrayAccess, \IteratorAggregate
 {
 	use ArrayAccessTrait;
 

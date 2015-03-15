@@ -14,19 +14,21 @@ namespace ICanBoogie\Storage;
 /**
  * A storage using APC.
  */
-class APCStorage implements Storage
+class APCStorage implements Storage, \ArrayAccess
 {
+	use ArrayAccessTrait;
+
 	private $master_key;
 
-	public function __construct()
+	public function __construct($master_key = null)
 	{
-		$this->master_key = md5($_SERVER['DOCUMENT_ROOT']);
+		$this->master_key = $master_key ?: substr(sha1($_SERVER['DOCUMENT_ROOT']), 0, 8);
 	}
 
 	/**
 	 * @inheritdoc
 	 */
-	public function store($key, $data, $ttl=0)
+	public function store($key, $data, $ttl = 0)
 	{
 		apc_store($this->master_key . $key, $data, $ttl);
 	}
@@ -54,7 +56,12 @@ class APCStorage implements Storage
 	 */
 	public function clear()
 	{
-		apc_clear_cache('user');
+		$iterator = new \APCIterator('user', '/^' . preg_quote($this->master_key) . '/', APC_ITER_NONE);
+
+		foreach ($iterator as $key => $dummy)
+		{
+			apc_delete($key);
+		}
 	}
 
 	/**

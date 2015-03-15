@@ -18,8 +18,16 @@ namespace ICanBoogie\Storage;
  */
 trait ArrayAccessTrait
 {
+	abstract public function store($key, $value, $ttl = null);
+	abstract public function retrieve($key);
+	abstract public function exists($key);
+	abstract public function eliminate($key);
+
 	/**
 	 * Alias to {@link store()}.
+	 *
+	 * @param string $key
+	 * @param mixed $value
 	 */
 	public function offsetSet($key, $value)
 	{
@@ -28,6 +36,10 @@ trait ArrayAccessTrait
 
 	/**
 	 * Alias to {@link exists()}.
+	 *
+	 * @param string $key
+	 *
+	 * @return bool
 	 */
 	public function offsetExists($key)
 	{
@@ -36,6 +48,8 @@ trait ArrayAccessTrait
 
 	/**
 	 * Alias to {@link eliminate()}.
+	 *
+	 * @param string $key
 	 */
 	public function offsetUnset($key)
 	{
@@ -44,6 +58,10 @@ trait ArrayAccessTrait
 
 	/**
 	 * Alias to {@link retrieve()}.
+	 *
+	 * @param string $key
+	 *
+	 * @return mixed
 	 */
 	public function offsetGet($key)
 	{
