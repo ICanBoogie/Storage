@@ -1,4 +1,11 @@
-# Storage [![Build Status](https://secure.travis-ci.org/ICanBoogie/Storage.svg?branch=master)](http://travis-ci.org/ICanBoogie/Storage)
+# Storage
+
+[![Release](https://img.shields.io/packagist/v/icanboogie/storage.svg)](https://github.com/ICanBoogie/Storage/releases)
+[![Build Status](https://img.shields.io/travis/ICanBoogie/Storage/master.svg)](http://travis-ci.org/ICanBoogie/Storage)
+[![HHVM](https://img.shields.io/hhvm/icanboogie/storage.svg)](http://hhvm.h4cc.de/package/icanboogie/storage)
+[![Code Quality](https://img.shields.io/scrutinizer/g/ICanBoogie/Storage/master.svg)](https://scrutinizer-ci.com/g/ICanBoogie/Storage)
+[![Code Coverage](https://img.shields.io/coveralls/ICanBoogie/Storage/master.svg)](https://coveralls.io/r/ICanBoogie/Storage)
+[![Packagist](https://img.shields.io/packagist/dt/icanboogie/storage.svg)](https://packagist.org/packages/icanboogie/storage)
 
 The package defines an API to store values, and provides an implementation for a filesystem
 storage.
@@ -46,11 +53,8 @@ cloned with the following command line:
 
 ## Documentation
 
-The package is documented as part of the [ICanBoogie](http://icanboogie.org/) framework
-[documentation](http://icanboogie.org/docs/). You can generate the documentation for the package
-and its dependencies with the `make doc` command. The documentation is generated in the `docs`
-directory. [ApiGen](http://apigen.org/) is required. You can later clean the directory with
-the `make clean` command.
+The package is documented as part of the [ICanBoogie][] framework
+[documentation](http://icanboogie.org/docs/). You can generate the documentation for the package and its dependencies with the `make doc` command. The documentation is generated in the `build/docs` directory. [ApiGen](http://apigen.org/) is required. The directory can later be cleaned with the `make clean` command.
 
 
 
@@ -58,13 +62,12 @@ the `make clean` command.
 
 ## Testing
 
-The test suite is ran with the `make test` command. [Composer](http://getcomposer.org/) is
-automatically installed as well as all dependencies required to run the suite. You can later
-clean the directory with the `make clean` command.
+The test suite is ran with the `make test` command. [PHPUnit](https://phpunit.de/) and [Composer](http://getcomposer.org/) need to be globally available to run the suite. The command installs dependencies as required. The `make test-coverage` command runs test suite and also creates an HTML coverage report in "build/coverage". The directory can later be cleaned with the `make clean` command.
 
 The package is continuously tested by [Travis CI](http://about.travis-ci.org/).
 
-[![Build Status](https://secure.travis-ci.org/ICanBoogie/Storage.svg?branch=master)](http://travis-ci.org/ICanBoogie/Storage)
+[![Build Status](https://img.shields.io/travis/ICanBoogie/Storage/master.svg)](https://travis-ci.org/ICanBoogie/Storage)
+[![Code Coverage](https://img.shields.io/coveralls/ICanBoogie/Storage/master.svg)](https://coveralls.io/r/ICanBoogie/Storage)
 
 
 
@@ -72,4 +75,4 @@ The package is continuously tested by [Travis CI](http://about.travis-ci.org/).
 
 ## License
 
-ICanBoogie/Storage is licensed under the New BSD License - See the [LICENSE](LICENSE) file for details.
+**ICanBoogie/Storage** is licensed under the New BSD License - See the [LICENSE](LICENSE) file for details.
