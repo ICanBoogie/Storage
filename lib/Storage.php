@@ -14,7 +14,7 @@ namespace ICanBoogie\Storage;
 /**
  * An interface for classes implementing storage capabilities.
  */
-interface StorageInterface
+interface Storage
 {
 	/**
 	 * Stores a variable.
@@ -27,7 +27,7 @@ interface StorageInterface
 	 * supplied (or if the `ttl` is empty), the value will persist until it is removed from the
 	 * cache manually, or otherwise fails to exist in the cache.
 	 */
-	public function store($key, $value, $ttl=null);
+	public function store($key, $value, $ttl = null);
 
 	/**
 	 * Retrieves a value.

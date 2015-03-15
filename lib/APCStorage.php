@@ -14,7 +14,7 @@ namespace ICanBoogie\Storage;
 /**
  * A storage using APC.
  */
-class APCStorage implements StorageInterface
+class APCStorage implements Storage
 {
 	private $master_key;
 
