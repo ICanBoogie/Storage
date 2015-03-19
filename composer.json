@@ -1,8 +1,8 @@
 {
 	"name": "icanboogie/storage",
 	"type": "library",
-	"description": "An API to store values.",
-	"keywords": [ "storage", "cache" ],
+	"description": "Store and retrieve values, using different/multiple storage backends.",
+	"keywords": [ "store", "retrieve", "cache" ],
 	"homepage": "http://icanboogie.org/",
 	"license": "BSD-3-Clause",
 	"authors": [
@@ -18,7 +18,7 @@
 		"source": "https://github.com/ICanBoogie/Storage"
 	},
 	"require": {
-		"php": ">=5.4.0"
+		"php": ">=5.5.0"
 	},
 	"autoload": {
 		"psr-4": {
