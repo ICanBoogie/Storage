@@ -18,11 +18,11 @@ class APCStorage implements Storage, \ArrayAccess
 {
 	use ArrayAccessTrait;
 
-	private $master_key;
+	private $prefix;
 
-	public function __construct($master_key = null)
+	public function __construct($prefix = null)
 	{
-		$this->master_key = $master_key ?: substr(sha1($_SERVER['DOCUMENT_ROOT']), 0, 8);
+		$this->prefix = $prefix ?: substr(sha1($_SERVER['DOCUMENT_ROOT']), 0, 8);
 	}
 
 	/**
@@ -30,7 +30,7 @@ class APCStorage implements Storage, \ArrayAccess
 	 */
 	public function store($key, $data, $ttl = 0)
 	{
-		apc_store($this->master_key . $key, $data, $ttl);
+		apc_store($this->prefix . $key, $data, $ttl);
 	}
 
 	/**
@@ -38,7 +38,7 @@ class APCStorage implements Storage, \ArrayAccess
 	 */
 	public function retrieve($key)
 	{
-		$rc = apc_fetch($this->master_key . $key, $success);
+		$rc = apc_fetch($this->prefix . $key, $success);
 
 		return $success ? $rc : null;
 	}
@@ -48,7 +48,7 @@ class APCStorage implements Storage, \ArrayAccess
 	 */
 	public function eliminate($key)
 	{
-		apc_delete($this->master_key . $key);
+		apc_delete($this->prefix . $key);
 	}
 
 	/**
@@ -56,7 +56,7 @@ class APCStorage implements Storage, \ArrayAccess
 	 */
 	public function clear()
 	{
-		$iterator = new \APCIterator('user', '/^' . preg_quote($this->master_key) . '/', APC_ITER_NONE);
+		$iterator = new \APCIterator('user', '/^' . preg_quote($this->prefix) . '/', APC_ITER_NONE);
 
 		foreach ($iterator as $key => $dummy)
 		{
@@ -69,6 +69,6 @@ class APCStorage implements Storage, \ArrayAccess
 	 */
 	public function exists($key)
 	{
-		return apc_exists($this->master_key . $key);
+		return apc_exists($this->prefix . $key);
 	}
 }

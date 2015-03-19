@@ -11,6 +11,9 @@
 
 namespace ICanBoogie\Storage;
 
+/**
+ * A storage using Redis.
+ */
 class RedisStorage implements Storage, \ArrayAccess
 {
 	use ArrayAccessTrait;

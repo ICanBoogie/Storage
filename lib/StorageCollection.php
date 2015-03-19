@@ -46,25 +46,21 @@ class StorageCollection extends CacheCollection implements Storage, \ArrayAccess
 		/* @var $update Storage[] */
 
 		$value = null;
-		$retrieved = false;
 		$update = [];
 
 		foreach ($this->collection as $storage)
 		{
-			if (!$storage->exists($key))
-			{
-				$update[] = $storage;
+            $value = $storage->retrieve($key);
 
-				continue;
+			if ($value !== null)
+			{
+				break;
 			}
 
-			$retrieved = true;
-			$value = $storage->retrieve($key);
-
-			break;
+            $update[] = $storage;
 		}
 
-		if (!$retrieved)
+		if ($value === null)
 		{
 			return null;
 		}
