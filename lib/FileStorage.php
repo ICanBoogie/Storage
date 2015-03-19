@@ -74,16 +74,24 @@ class FileStorage implements Storage, \ArrayAccess, \IteratorAggregate
 
 			touch($ttl_mark, $future, $future);
 		}
-		else if (file_exists($ttl_mark))
+		elseif (file_exists($ttl_mark))
 		{
 			unlink($ttl_mark);
 		}
 
-		$dir = dirname($pathname);
+		if ($value === true)
+		{
+			touch($pathname);
 
-		$uniq_id = uniqid(mt_rand(), true);
-		$tmp_pathname = $dir . '/var-' . $uniq_id;
-		$garbage_pathname = $dir . '/garbage-var-' . $uniq_id;
+			return;
+		}
+
+		if ($value === false || $value === null)
+		{
+			$this->offsetUnset($key);
+
+			return;
+		}
 
 		#
 		# If the value is an array or a string it is serialized and prepended with a magic
@@ -95,66 +103,86 @@ class FileStorage implements Storage, \ArrayAccess, \IteratorAggregate
 			$value = self::MAGIC . serialize($value);
 		}
 
-		if ($value === true)
+		set_error_handler(function() {});
+
+		try
 		{
-			touch($pathname);
+			$this->safe_store($pathname, $value);
 		}
-		else if ($value === false || $value === null)
+		catch (\Exception $e)
 		{
-			$this->offsetUnset($key);
+			throw $e;
 		}
-		else
+		finally
 		{
-			#
-			# We lock the file create/update, but we write the data in a temporary file, which is then
-			# renamed once the data is written.
-			#
+			restore_error_handler();
+		}
+	}
 
-			$fh = fopen($pathname, 'a+');
+	/**
+	 * Safely store the value.
+	 *
+	 * @param $pathname
+	 * @param $value
+	 *
+	 * @throws \Exception if an error occurs.
+	 */
+	private function safe_store($pathname, $value)
+	{
+		$dir = dirname($pathname);
+		$uniqid = uniqid(mt_rand(), true);
+		$tmp_pathname = $dir . '/var-' . $uniqid;
+		$garbage_pathname = $dir . '/garbage-var-' . $uniqid;
 
-			if (!$fh)
-			{
-				throw new \Exception("Unable to open $pathname.");
-			}
+		#
+		# We lock the file create/update, but we write the data in a temporary file, which is then
+		# renamed once the data is written.
+		#
 
-			if (self::$release_after && !flock($fh, LOCK_EX))
-			{
-				throw new \Exception("Unable to get to exclusive lock on $pathname.");
-			}
+		$fh = fopen($pathname, 'a+');
 
-			file_put_contents($tmp_pathname, $value);
+		if (!$fh)
+		{
+			throw new \Exception("Unable to open $pathname.");
+		}
 
-			#
-			# Windows, this is for you
-			#
-			if (!self::$release_after)
-			{
-				fclose($fh);
-			}
+		if (self::$release_after && !flock($fh, LOCK_EX))
+		{
+			throw new \Exception("Unable to get to exclusive lock on $pathname.");
+		}
 
-			if (!rename($pathname, $garbage_pathname))
-			{
-				throw new \Exception("Unable to rename $pathname as $garbage_pathname.");
-			}
+		file_put_contents($tmp_pathname, $value);
 
-			if (!rename($tmp_pathname, $pathname))
-			{
-				throw new \Exception("Unable to rename $tmp_pathname as $pathname.");
-			}
+		#
+		# Windows, this is for you
+		#
+		if (!self::$release_after)
+		{
+			fclose($fh);
+		}
 
-			if (!unlink($garbage_pathname))
-			{
-				throw new \Exception("Unable to delete $garbage_pathname.");
-			}
+		if (!rename($pathname, $garbage_pathname))
+		{
+			throw new \Exception("Unable to rename $pathname as $garbage_pathname.");
+		}
 
-			#
-			# Unix, this is for you
-			#
-			if (self::$release_after)
-			{
-				flock($fh, LOCK_UN);
-				fclose($fh);
-			}
+		if (!rename($tmp_pathname, $pathname))
+		{
+			throw new \Exception("Unable to rename $tmp_pathname as $pathname.");
+		}
+
+		if (!unlink($garbage_pathname))
+		{
+			throw new \Exception("Unable to delete $garbage_pathname.");
+		}
+
+		#
+		# Unix, this is for you
+		#
+		if (self::$release_after)
+		{
+			flock($fh, LOCK_UN);
+			fclose($fh);
 		}
 	}
 
@@ -205,9 +233,7 @@ class FileStorage implements Storage, \ArrayAccess, \IteratorAggregate
 	 */
 	public function exists($name)
 	{
-		$pathname = $this->path . $name;
-
-		return file_exists($pathname);
+		return file_exists($this->path . $name);
 	}
 
 	public function clear()
@@ -222,9 +248,7 @@ class FileStorage implements Storage, \ArrayAccess, \IteratorAggregate
 	 */
 	public function getIterator()
 	{
-		$iterator = new \DirectoryIterator($this->path);
-
-		return new FileStorageIterator($iterator);
+		return new FileStorageIterator(new \DirectoryIterator($this->path));
 	}
 
 	/**
@@ -236,10 +260,7 @@ class FileStorage implements Storage, \ArrayAccess, \IteratorAggregate
 	 */
 	public function matching($regex)
 	{
-		$dir = new \DirectoryIterator($this->path);
-		$filter = new \RegexIterator($dir, $regex);
-
-		return new FileStorageIterator($filter);
+		return new FileStorageIterator(new \RegexIterator(new \DirectoryIterator($this->path), $regex));
 	}
 
 	private $is_writable;
