@@ -19,7 +19,7 @@ class FileStorage implements Storage, \ArrayAccess, \IteratorAggregate
 	use ArrayAccessTrait;
 
 	/**
-	 * Magic pattern used to recognized automatically serialized values.
+	 * Magic pattern used to recognize automatically serialized values.
 	 *
 	 * @var string
 	 */
@@ -57,16 +57,91 @@ class FileStorage implements Storage, \ArrayAccess, \IteratorAggregate
 	}
 
 	/**
+	 * Normalizes a key into a valid filename.
+	 *
+	 * @param string $key
+	 *
+	 * @return string
+	 */
+	protected function normalize_key($key)
+	{
+		return str_replace('/', '--', $key);
+	}
+
+	/**
+	 * Formats a key into an absolute pathname.
+	 *
+	 * @param string $key
+	 *
+	 * @return string
+	 */
+	protected function format_pathname($key)
+	{
+		return $this->path . $this->normalize_key($key);
+	}
+
+	/**
+	 * Formats a pathname with a TTL extension.
+	 *
+	 * @param string $pathname
+	 *
+	 * @return string
+	 */
+	protected function format_pathname_with_ttl($pathname)
+	{
+		return $pathname . '.ttl';
+	}
+
+	/**
+	 * Serializes a value so that it can be stored.
+	 *
+	 * @param mixed $value
+	 *
+	 * @return string
+	 */
+	protected function serialize($value)
+	{
+		#
+		# If the value is an array or a string it is serialized and prepended with a magic
+		# identifier.
+		#
+
+		if (is_array($value) || is_object($value))
+		{
+			return self::MAGIC . serialize($value);
+		}
+
+		return $value;
+	}
+
+	/**
+	 * Unserializes a value retrieved from storage.
+	 *
+	 * @param string $value
+	 *
+	 * @return mixed
+	 */
+	protected function unserialize($value)
+	{
+		if (substr($value, 0, self::MAGIC_LENGTH) == self::MAGIC)
+		{
+			return unserialize(substr($value, self::MAGIC_LENGTH));
+		}
+
+		return $value;
+	}
+
+	/**
 	 * @inheritdoc
 	 *
 	 * @throws \Exception when a file operation fails.
 	 */
-	public function store($key, $value, $ttl=0)
+	public function store($key, $value, $ttl = 0)
 	{
 		$this->check_writable();
 
-		$pathname = $this->path . $key;
-		$ttl_mark = $pathname . '.ttl';
+		$pathname = $this->format_pathname($key);
+		$ttl_mark = $this->format_pathname_with_ttl($pathname);
 
 		if ($ttl)
 		{
@@ -88,26 +163,16 @@ class FileStorage implements Storage, \ArrayAccess, \IteratorAggregate
 
 		if ($value === false || $value === null)
 		{
-			$this->offsetUnset($key);
+			$this->eliminate($key);
 
 			return;
-		}
-
-		#
-		# If the value is an array or a string it is serialized and prepended with a magic
-		# identifier.
-		#
-
-		if (is_array($value) || is_object($value))
-		{
-			$value = self::MAGIC . serialize($value);
 		}
 
 		set_error_handler(function() {});
 
 		try
 		{
-			$this->safe_store($pathname, $value);
+			$this->safe_store($pathname, $this->serialize($value));
 		}
 		catch (\Exception $e)
 		{
@@ -191,34 +256,27 @@ class FileStorage implements Storage, \ArrayAccess, \IteratorAggregate
 	 *
 	 * @param mixed $default The value returned if the key does not exists. Defaults to `null`.
 	 */
-	public function retrieve($name, $default=null)
+	public function retrieve($key, $default = null)
 	{
 		$this->check_writable();
 
-		$pathname = $this->path . $name;
-		$ttl_mark = $pathname . '.ttl';
+		$pathname = $this->format_pathname($key);
+		$ttl_mark = $this->format_pathname_with_ttl($pathname);
 
 		if (file_exists($ttl_mark) && fileatime($ttl_mark) < time() || !file_exists($pathname))
 		{
 			return $default;
 		}
 
-		$value = file_get_contents($pathname);
-
-		if (substr($value, 0, self::MAGIC_LENGTH) == self::MAGIC)
-		{
-			$value = unserialize(substr($value, self::MAGIC_LENGTH));
-		}
-
-		return $value;
+		return $this->unserialize(file_get_contents($pathname));
 	}
 
 	/**
 	 * @inheritdoc
 	 */
-	public function eliminate($name)
+	public function eliminate($key)
 	{
-		$pathname = $this->path . $name;
+		$pathname = $this->format_pathname($key);
 
 		if (!file_exists($pathname))
 		{
@@ -231,9 +289,9 @@ class FileStorage implements Storage, \ArrayAccess, \IteratorAggregate
 	/**
 	 * @inheritdoc
 	 */
-	public function exists($name)
+	public function exists($key)
 	{
-		return file_exists($this->path . $name);
+		return file_exists($this->format_pathname($key));
 	}
 
 	public function clear()
