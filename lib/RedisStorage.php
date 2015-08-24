@@ -18,9 +18,20 @@ class RedisStorage implements Storage, \ArrayAccess
 {
 	use ArrayAccessTrait;
 
+	/**
+	 * @var \Redis
+	 */
 	private $redis;
+
+	/**
+	 * @var string
+	 */
 	private $prefix;
 
+	/**
+	 * @param \Redis|mixed $redis
+	 * @param string $prefix
+	 */
 	public function __construct($redis, $prefix)
 	{
 		$this->redis = $redis;
