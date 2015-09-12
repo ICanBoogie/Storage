@@ -96,6 +96,13 @@ All the storage instances in the collection are updated by the `store()`, `elimi
 
 
 
+## Support functions
+
+- `APCStorage::is_available()` may be used to check if APC is available.
+
+
+
+
 
 ----------
 

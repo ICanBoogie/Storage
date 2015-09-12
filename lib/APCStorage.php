@@ -18,8 +18,26 @@ class APCStorage implements Storage, \ArrayAccess
 {
 	use ArrayAccessTrait;
 
+	/**
+	 * Whether the APC feature is available.
+	 *
+	 * @return bool
+	 *
+	 * @codeCoverageIgnore
+	 */
+	static public function is_available()
+	{
+		return extension_loaded('apc') && ini_get('apc.enabled');
+	}
+
+	/**
+	 * @var string
+	 */
 	private $prefix;
 
+	/**
+	 * @param string|null $prefix
+	 */
 	public function __construct($prefix = null)
 	{
 		$this->prefix = $prefix ?: substr(sha1($_SERVER['DOCUMENT_ROOT']), 0, 8);
