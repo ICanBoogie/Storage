@@ -1,10 +1,10 @@
 # Storage
 
 [![Release](https://img.shields.io/packagist/v/icanboogie/storage.svg)](https://github.com/ICanBoogie/Storage/releases)
-[![Build Status](https://img.shields.io/travis/ICanBoogie/Storage/master.svg)](http://travis-ci.org/ICanBoogie/Storage)
+[![Build Status](https://img.shields.io/travis/ICanBoogie/Storage/1.2.svg)](http://travis-ci.org/ICanBoogie/Storage)
 [![HHVM](https://img.shields.io/hhvm/icanboogie/storage.svg)](http://hhvm.h4cc.de/package/icanboogie/storage)
-[![Code Quality](https://img.shields.io/scrutinizer/g/ICanBoogie/Storage/master.svg)](https://scrutinizer-ci.com/g/ICanBoogie/Storage)
-[![Code Coverage](https://img.shields.io/coveralls/ICanBoogie/Storage/master.svg)](https://coveralls.io/r/ICanBoogie/Storage)
+[![Code Quality](https://img.shields.io/scrutinizer/g/ICanBoogie/Storage/1.2.svg)](https://scrutinizer-ci.com/g/ICanBoogie/Storage/?branch=1.2)
+[![Code Coverage](https://img.shields.io/coveralls/ICanBoogie/Storage/1.2.svg)](https://coveralls.io/r/ICanBoogie/Storage)
 [![Packagist](https://img.shields.io/packagist/dt/icanboogie/storage.svg)](https://packagist.org/packages/icanboogie/storage)
 
 The **icanboogie/storage** package defines an API to store and retrieve values, while offering
