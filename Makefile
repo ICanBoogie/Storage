@@ -1,7 +1,7 @@
 # customization
 
-PACKAGE_NAME = "ICanBoogie/Storage"
-PACKAGE_VERSION = 1.1.0
+PACKAGE_NAME = icanboogie/storage
+PACKAGE_VERSION = 1.2.0
 
 # do not edit the following lines
 
@@ -28,8 +28,6 @@ doc: vendor
 	@mkdir -p build/docs
 	@apigen generate \
 	--source lib \
-	--exclude "*/composer/*" \
-	--exclude "*/autoload.php" \
 	--destination build/docs/ \
 	--title "$(PACKAGE_NAME) $(PACKAGE_VERSION)" \
 	--template-theme "bootstrap"
@@ -38,4 +36,3 @@ clean:
 	@rm -fR build
 	@rm -fR vendor
 	@rm -f composer.lock
-
