@@ -37,7 +37,7 @@ use ICanBoogie\Storage\RunTimeStorage;
 $storage = new RunTimeStorage;
 $storage->exists('icanboogie');     // false
 $storage->retrieve('icanboogie');   // null
-$storage->store('icanboogie', "Yes Sir I Can Boogie");
+$storage->store('icanboogie', "Yes Sir, I Can Boogie");
 $storage->retrieve('icanboogie');   // "Yes Sir, I Can Boogie"
 $storage->eliminate('icanboogie');
 $storage->exists('icanboogie');     // false
@@ -54,7 +54,7 @@ use ICanBoogie\Storage\RunTimeStorage;
 $storage = new RunTimeStorage;
 isset($storage['icanboogie']);     // false
 $storage['icanboogie'];            // null
-$storage['icanboogie'] = "Yes Sir I Can Boogie";
+$storage['icanboogie'] = "Yes Sir, I Can Boogie";
 $storage['icanboogie'];            // "Yes Sir, I Can Boogie"
 unset($storage['icanboogie']);
 isset($storage['icanboogie']);     // false
