@@ -16,9 +16,9 @@ namespace ICanBoogie\Storage;
  *
  * @package ICanBoogie\Storage
  */
-class StorageCollection extends CacheCollection implements Storage, \ArrayAccess
+class StorageCollection extends CacheCollection implements Storage, \ArrayAccess, \IteratorAggregate
 {
-	use ArrayAccessTrait;
+	use Storage\ArrayAccess;
 
 	/**
 	 * @var Storage[]
@@ -28,14 +28,6 @@ class StorageCollection extends CacheCollection implements Storage, \ArrayAccess
 	public function __construct(array $collection)
 	{
 		$this->collection = $collection;
-	}
-
-	/**
-	 * @inheritdoc
-	 */
-	public function store($key, $value, $ttl = null)
-	{
-		$this->for_each(__FUNCTION__, func_get_args());
 	}
 
 	/**
@@ -76,6 +68,14 @@ class StorageCollection extends CacheCollection implements Storage, \ArrayAccess
 	/**
 	 * @inheritdoc
 	 */
+	public function store($key, $value, $ttl = null)
+	{
+		$this->for_each(__FUNCTION__, func_get_args());
+	}
+
+	/**
+	 * @inheritdoc
+	 */
 	public function eliminate($key)
 	{
 		$this->for_each(__FUNCTION__, func_get_args());
@@ -87,6 +87,16 @@ class StorageCollection extends CacheCollection implements Storage, \ArrayAccess
 	public function clear()
 	{
 		$this->for_each(__FUNCTION__, func_get_args());
+	}
+
+	/**
+	 * @inheritdoc
+	 *
+	 * @return Storage|null
+	 */
+	public function find_by_type($type)
+	{
+		return parent::find_by_type($type);
 	}
 
 	/**

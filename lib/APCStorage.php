@@ -16,7 +16,7 @@ namespace ICanBoogie\Storage;
  */
 class APCStorage implements Storage, \ArrayAccess
 {
-	use ArrayAccessTrait;
+	use Storage\ArrayAccess;
 
 	/**
 	 * Whether the APC feature is available.
@@ -40,15 +40,15 @@ class APCStorage implements Storage, \ArrayAccess
 	 */
 	public function __construct($prefix = null)
 	{
-		$this->prefix = $prefix ?: substr(sha1($_SERVER['DOCUMENT_ROOT']), 0, 8);
+		$this->prefix = $prefix ?: substr(sha1($_SERVER['DOCUMENT_ROOT']), 0, 8) . ':';
 	}
 
 	/**
 	 * @inheritdoc
 	 */
-	public function store($key, $data, $ttl = 0)
+	public function exists($key)
 	{
-		apc_store($this->prefix . $key, $data, $ttl);
+		return apc_exists($this->prefix . $key);
 	}
 
 	/**
@@ -64,6 +64,14 @@ class APCStorage implements Storage, \ArrayAccess
 	/**
 	 * @inheritdoc
 	 */
+	public function store($key, $data, $ttl = 0)
+	{
+		apc_store($this->prefix . $key, $data, $ttl);
+	}
+
+	/**
+	 * @inheritdoc
+	 */
 	public function eliminate($key)
 	{
 		apc_delete($this->prefix . $key);
@@ -74,9 +82,7 @@ class APCStorage implements Storage, \ArrayAccess
 	 */
 	public function clear()
 	{
-		$iterator = new \APCIterator('user', '/^' . preg_quote($this->prefix) . '/', APC_ITER_NONE);
-
-		foreach ($iterator as $key => $dummy)
+		foreach ($this->create_internal_iterator() as $key => $dummy)
 		{
 			apc_delete($key);
 		}
@@ -85,8 +91,23 @@ class APCStorage implements Storage, \ArrayAccess
 	/**
 	 * @inheritdoc
 	 */
-	public function exists($key)
+	public function getIterator()
 	{
-		return apc_exists($this->prefix . $key);
+		$prefix_length = strlen($this->prefix);
+
+		foreach ($this->create_internal_iterator() as $key => $dummy)
+		{
+			yield substr($key, $prefix_length);
+		}
+	}
+
+	/**
+	 * Creates internal iterator.
+	 *
+	 * @return \APCIterator
+	 */
+	private function create_internal_iterator()
+	{
+		return new \APCIterator('user', '/^' . preg_quote($this->prefix) . '/', APC_ITER_NONE);
 	}
 }

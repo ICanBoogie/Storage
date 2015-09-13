@@ -14,9 +14,10 @@ namespace ICanBoogie\Storage;
 /**
  * A storage using the file system.
  */
-class FileStorage implements Storage, \ArrayAccess, \IteratorAggregate
+class FileStorage implements Storage, \ArrayAccess
 {
-	use ArrayAccessTrait;
+	use Storage\ArrayAccess;
+	use Storage\ClearWithIterator;
 
 	/**
 	 * Magic pattern used to recognize automatically serialized values.
@@ -54,6 +55,102 @@ class FileStorage implements Storage, \ArrayAccess, \IteratorAggregate
 		{
 			self::$release_after = strpos(PHP_OS, 'WIN') === 0 ? false : true;
 		}
+	}
+
+	/**
+	 * @inheritdoc
+	 */
+	public function exists($key)
+	{
+		return file_exists($this->format_pathname($key));
+	}
+
+	/**
+	 * @inheritdoc
+	 *
+	 * @param mixed $default The value returned if the key does not exists. Defaults to `null`.
+	 */
+	public function retrieve($key, $default = null)
+	{
+		$this->check_writable();
+
+		$pathname = $this->format_pathname($key);
+		$ttl_mark = $this->format_pathname_with_ttl($pathname);
+
+		if (file_exists($ttl_mark) && fileatime($ttl_mark) < time() || !file_exists($pathname))
+		{
+			return $default;
+		}
+
+		return $this->unserialize(file_get_contents($pathname));
+	}
+
+	/**
+	 * @inheritdoc
+	 *
+	 * @throws \Exception when a file operation fails.
+	 */
+	public function store($key, $value, $ttl = 0)
+	{
+		$this->check_writable();
+
+		$pathname = $this->format_pathname($key);
+		$ttl_mark = $this->format_pathname_with_ttl($pathname);
+
+		if ($ttl)
+		{
+			$future = time() + $ttl;
+
+			touch($ttl_mark, $future, $future);
+		}
+		elseif (file_exists($ttl_mark))
+		{
+			unlink($ttl_mark);
+		}
+
+		if ($value === true)
+		{
+			touch($pathname);
+
+			return;
+		}
+
+		if ($value === false || $value === null)
+		{
+			$this->eliminate($key);
+
+			return;
+		}
+
+		set_error_handler(function() {});
+
+		try
+		{
+			$this->safe_store($pathname, $this->serialize($value));
+		}
+		catch (\Exception $e)
+		{
+			throw $e;
+		}
+		finally
+		{
+			restore_error_handler();
+		}
+	}
+
+	/**
+	 * @inheritdoc
+	 */
+	public function eliminate($key)
+	{
+		$pathname = $this->format_pathname($key);
+
+		if (!file_exists($pathname))
+		{
+			return;
+		}
+
+		unlink($pathname);
 	}
 
 	/**
@@ -132,59 +229,6 @@ class FileStorage implements Storage, \ArrayAccess, \IteratorAggregate
 	}
 
 	/**
-	 * @inheritdoc
-	 *
-	 * @throws \Exception when a file operation fails.
-	 */
-	public function store($key, $value, $ttl = 0)
-	{
-		$this->check_writable();
-
-		$pathname = $this->format_pathname($key);
-		$ttl_mark = $this->format_pathname_with_ttl($pathname);
-
-		if ($ttl)
-		{
-			$future = time() + $ttl;
-
-			touch($ttl_mark, $future, $future);
-		}
-		elseif (file_exists($ttl_mark))
-		{
-			unlink($ttl_mark);
-		}
-
-		if ($value === true)
-		{
-			touch($pathname);
-
-			return;
-		}
-
-		if ($value === false || $value === null)
-		{
-			$this->eliminate($key);
-
-			return;
-		}
-
-		set_error_handler(function() {});
-
-		try
-		{
-			$this->safe_store($pathname, $this->serialize($value));
-		}
-		catch (\Exception $e)
-		{
-			throw $e;
-		}
-		finally
-		{
-			restore_error_handler();
-		}
-	}
-
-	/**
 	 * Safely store the value.
 	 *
 	 * @param $pathname
@@ -253,60 +297,20 @@ class FileStorage implements Storage, \ArrayAccess, \IteratorAggregate
 
 	/**
 	 * @inheritdoc
-	 *
-	 * @param mixed $default The value returned if the key does not exists. Defaults to `null`.
-	 */
-	public function retrieve($key, $default = null)
-	{
-		$this->check_writable();
-
-		$pathname = $this->format_pathname($key);
-		$ttl_mark = $this->format_pathname_with_ttl($pathname);
-
-		if (file_exists($ttl_mark) && fileatime($ttl_mark) < time() || !file_exists($pathname))
-		{
-			return $default;
-		}
-
-		return $this->unserialize(file_get_contents($pathname));
-	}
-
-	/**
-	 * @inheritdoc
-	 */
-	public function eliminate($key)
-	{
-		$pathname = $this->format_pathname($key);
-
-		if (!file_exists($pathname))
-		{
-			return;
-		}
-
-		unlink($pathname);
-	}
-
-	/**
-	 * @inheritdoc
-	 */
-	public function exists($key)
-	{
-		return file_exists($this->format_pathname($key));
-	}
-
-	public function clear()
-	{
-		throw new \Exception("The method clear() is not implemented");
-	}
-
-	/**
-	 * Returns an iterator for the storage.
-	 *
-	 * @return FileStorageIterator
 	 */
 	public function getIterator()
 	{
-		return new FileStorageIterator(new \DirectoryIterator($this->path));
+		$iterator = new \DirectoryIterator($this->path);
+
+		foreach ($iterator as $file)
+		{
+			if ($file->isDot() || $file->isDir())
+			{
+				continue;
+			}
+
+			yield $file->getFilename();
+		}
 	}
 
 	/**

@@ -33,9 +33,9 @@ class CacheCollection implements Cache
 	 */
 	public function exists($key)
 	{
-		foreach ($this->collection as $storage)
+		foreach ($this->collection as $cache)
 		{
-			if ($storage->exists($key))
+			if ($cache->exists($key))
 			{
 				return true;
 			}
@@ -49,11 +49,39 @@ class CacheCollection implements Cache
 	 */
 	public function retrieve($key)
 	{
-		foreach ($this->collection as $storage)
+		foreach ($this->collection as $cache)
 		{
-			if ($storage->exists($key))
+			if ($cache->exists($key))
 			{
-				return $storage->retrieve($key);
+				return $cache->retrieve($key);
+			}
+		}
+
+		return null;
+	}
+
+	/**
+	 * @inheritdoc
+	 */
+	public function getIterator()
+	{
+		return reset($this->collection)->getIterator();
+	}
+
+	/**
+	 * Finds a cache by type.
+	 *
+	 * @param string $type The class or interface of the storage to find.
+	 *
+	 * @return Cache|null The cache matching the specified type or `null` if none match.
+	 */
+	public function find_by_type($type)
+	{
+		foreach ($this->collection as $cache)
+		{
+			if ($cache instanceof $type)
+			{
+				return $cache;
 			}
 		}
 

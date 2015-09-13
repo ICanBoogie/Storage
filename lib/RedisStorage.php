@@ -16,7 +16,8 @@ namespace ICanBoogie\Storage;
  */
 class RedisStorage implements Storage, \ArrayAccess
 {
-	use ArrayAccessTrait;
+	use Storage\ArrayAccess;
+	use Storage\ClearWithIterator;
 
 	/**
 	 * @var \Redis
@@ -41,6 +42,27 @@ class RedisStorage implements Storage, \ArrayAccess
 	/**
 	 * @inheritdoc
 	 */
+	public function retrieve($key)
+	{
+		if (!$this->exists($key))
+		{
+			return null;
+		}
+
+		return unserialize($this->redis->get($this->prefix . $key));
+	}
+
+	/**
+	 * @inheritdoc
+	 */
+	public function exists($key)
+	{
+		return $this->redis->exists($this->prefix . $key);
+	}
+
+	/**
+	 * @inheritdoc
+	 */
 	public function store($key, $value, $ttl = null)
 	{
 		$key = $this->prefix . $key;
@@ -58,19 +80,6 @@ class RedisStorage implements Storage, \ArrayAccess
 	/**
 	 * @inheritdoc
 	 */
-	public function retrieve($key)
-	{
-		if (!$this->exists($key))
-		{
-			return null;
-		}
-
-		return unserialize($this->redis->get($this->prefix . $key));
-	}
-
-	/**
-	 * @inheritdoc
-	 */
 	public function eliminate($key)
 	{
 		$this->redis->delete($this->prefix . $key);
@@ -79,30 +88,23 @@ class RedisStorage implements Storage, \ArrayAccess
 	/**
 	 * @inheritdoc
 	 */
-	public function exists($key)
-	{
-		return $this->redis->exists($this->prefix . $key);
-	}
-
-	/**
-	 * Clears the cache.
-	 */
-	public function clear()
+	public function getIterator()
 	{
 		$redis = $this->redis;
 		$prefix = $this->prefix;
+		$prefix_length = strlen($prefix);
 		$it = null;
 
-		while($keys = $redis->scan($it))
+		while(($keys = $redis->scan($it)))
 		{
-			foreach ($keys as $k)
+			foreach ($keys as $internal_key)
 			{
-				if (strpos($k, $prefix) !== 0)
+				if (strpos($internal_key, $prefix) !== 0)
 				{
 					continue;
 				}
 
-				$this->redis->delete($k);
+				yield substr($internal_key, $prefix_length);
 			}
 		}
 	}

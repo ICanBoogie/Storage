@@ -14,7 +14,7 @@ namespace ICanBoogie\Storage;
 /**
  * An interface for classes implementing storage capabilities.
  */
-interface Storage
+interface Storage extends Cache
 {
 	/**
 	 * Stores a variable.
@@ -30,29 +30,11 @@ interface Storage
 	public function store($key, $value, $ttl = null);
 
 	/**
-	 * Retrieves a value.
-	 *
-	 * @param string $key
-	 *
-	 * @return mixed|null The value associated with the key, or `null` if the key doesn't exists.
-	 */
-	public function retrieve($key);
-
-	/**
 	 * Removes a value and its key.
 	 *
 	 * @param string $key
 	 */
 	public function eliminate($key);
-
-	/**
-	 * Checks if a key exists.
-	 *
-	 * @param string $key
-	 *
-	 * @return bool `true` if the key exists, `false` otherwise.
-	 */
-	public function exists($key);
 
 	/**
 	 * Clears the cache.

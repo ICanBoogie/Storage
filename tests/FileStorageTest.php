@@ -4,24 +4,26 @@ namespace ICanBoogie\Storage;
 
 class FileStorageTest extends \PHPUnit_Framework_TestCase
 {
+	use TestStorageTrait;
+
 	/**
 	 * @var FileStorage
 	 */
-	static private $instance;
+	private $storage;
 
-	static public function setupBeforeClass()
+	public function setUp()
 	{
-		self::$instance = new FileStorage(__DIR__ . '/sandbox');
+		$this->storage = new FileStorage(__DIR__ . '/sandbox/' . uniqid());
 	}
 
 	public function test_exists_undefined()
 	{
-		$this->assertFalse(self::$instance->exists('undefined'));
+		$this->assertFalse($this->storage->exists('undefined'));
 	}
 
 	public function test_retrieve_undefined()
 	{
-		$this->assertNull(self::$instance->retrieve('undefined'));
+		$this->assertNull($this->storage->retrieve('undefined'));
 	}
 
 	public function test_store_simple()
@@ -29,10 +31,10 @@ class FileStorageTest extends \PHPUnit_Framework_TestCase
 		$k = __FUNCTION__;
 		$value = uniqid();
 
-		self::$instance->store($k, $value);
-		$this->assertEquals($value, self::$instance->retrieve($k));
-		self::$instance->eliminate($k);
-		$this->assertFalse(self::$instance->exists($k));
+		$this->storage->store($k, $value);
+		$this->assertEquals($value, $this->storage->retrieve($k));
+		$this->storage->eliminate($k);
+		$this->assertFalse($this->storage->exists($k));
 	}
 
 	public function test_store_complex()
@@ -40,9 +42,9 @@ class FileStorageTest extends \PHPUnit_Framework_TestCase
 		$k = __FUNCTION__;
 		$value = [ uniqid(), uniqid(), uniqid() ];
 
-		self::$instance->store($k, $value);
-		$this->assertEquals($value, self::$instance->retrieve($k));
-		self::$instance->eliminate($k);
-		$this->assertFalse(self::$instance->exists($k));
+		$this->storage->store($k, $value);
+		$this->assertEquals($value, $this->storage->retrieve($k));
+		$this->storage->eliminate($k);
+		$this->assertFalse($this->storage->exists($k));
 	}
 }

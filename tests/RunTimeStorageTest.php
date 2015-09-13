@@ -9,5 +9,19 @@
  * file that was distributed with this source code.
  */
 
-require __DIR__ . '/../vendor/autoload.php';
-require 'TestStorageTrait.php';
+namespace ICanBoogie\Storage;
+
+class RunTimeStorageTest extends \PHPUnit_Framework_TestCase
+{
+	use TestStorageTrait;
+
+	/**
+	 * @var Storage
+	 */
+	private $storage;
+
+	public function setUp()
+	{
+		$this->storage = new RunTimeStorage;
+	}
+}

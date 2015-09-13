@@ -9,5 +9,18 @@
  * file that was distributed with this source code.
  */
 
-require __DIR__ . '/../vendor/autoload.php';
-require 'TestStorageTrait.php';
+namespace ICanBoogie\Storage\Storage;
+
+trait ClearWithIterator
+{
+	abstract function eliminate($key);
+	abstract function getIterator();
+
+	public function clear()
+	{
+		foreach ($this as $key)
+		{
+			$this->eliminate($key);
+		}
+	}
+}

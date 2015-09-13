@@ -9,14 +9,14 @@
  * file that was distributed with this source code.
  */
 
-namespace ICanBoogie\Storage;
+namespace ICanBoogie\Storage\Storage;
 
 /**
  * A trait for storage implementing {@link \ArrayAccess}.
  *
  * @package ICanBoogie\Storage
  */
-trait ArrayAccessTrait
+trait ArrayAccess
 {
 	abstract public function store($key, $value, $ttl = null);
 	abstract public function retrieve($key);

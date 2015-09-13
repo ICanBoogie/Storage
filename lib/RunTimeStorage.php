@@ -16,8 +16,10 @@ namespace ICanBoogie\Storage;
  *
  * @package ICanBoogie\Storage
  */
-class RunTimeStorage implements Storage
+class RunTimeStorage implements Storage, \ArrayAccess
 {
+	use Storage\ArrayAccess;
+
 	private $values = [];
 
 	/**
@@ -58,5 +60,13 @@ class RunTimeStorage implements Storage
 	public function clear()
 	{
 		$this->values = [];
+	}
+
+	/**
+	 * @inheritdoc
+	 */
+	public function getIterator()
+	{
+		return new \ArrayIterator(array_keys($this->values));
 	}
 }

@@ -13,10 +13,8 @@ namespace ICanBoogie\Storage;
 
 /**
  * An interface for classes implementing cache capabilities.
- *
- * @package ICanBoogie\Storage
  */
-interface Cache
+interface Cache extends \IteratorAggregate
 {
 	/**
 	 * Checks if a key exists in a storage.
@@ -32,7 +30,14 @@ interface Cache
 	 *
 	 * @param string $key The key of the value.
 	 *
-	 * @return mixed
+	 * @return mixed|null The value associated with the key, or `null` if the key doesn't exists.
 	 */
 	public function retrieve($key);
+
+	/**
+	 * @inheritdoc
+	 *
+	 * @return \Iterator
+	 */
+	public function getIterator();
 }

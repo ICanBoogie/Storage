@@ -34,7 +34,8 @@ value. Different storage store values using different mechanisms, and sometimes 
 period of time. It's always a good idea to choose the storage that best fits a situation,
 according to the persistence requirement and the expensiveness of the storage.
 
-Storage classes implement the [Storage][] interface, including the [StorageCollection][] class.
+> **Note:** Storage classes implement the [Storage][] interface, including the
+[StorageCollection][] class.
 
 ```php
 <?php
@@ -51,8 +52,13 @@ $storage->exists('icanboogie');     // false
 $storage->retrieve('icanboogie');   // null
 ```
 
-Storage classes also implement the `ArrayAccess` interface, and use the [ArrayAccessTrait][] trait,
-and can be accessed as arrays.
+
+
+
+
+### Use storages like arrays
+
+Storage implement the `ArrayAccess` interface and may be accessed as arrays.
 
 ```php
 <?php
@@ -67,6 +73,34 @@ $storage['icanboogie'];            // "Yes Sir, I Can Boogie"
 unset($storage['icanboogie']);
 isset($storage['icanboogie']);     // false
 $storage['icanboogie'];            // null
+```
+
+
+
+
+
+### Iterate storage keys
+
+Storage implement the `IteratorAggregate` interface and may be used in a `foreach` to
+iterate their keys:
+
+```php
+<?php
+
+$storage['one'] = 1;
+$storage['two'] = 2;
+$storage['three'] = 3;
+
+foreach ($storage as $key)
+{
+	echo "defined: $key\n";
+}
+```
+
+```
+defined: one
+defined: two
+defined: three
 ```
 
 
@@ -104,6 +138,15 @@ All the storage instances in the collection are updated by the `store()`, `elimi
 and `clear()` methods. Storage instances are also updated when values are retrieved from
 _more expensive_ storages, so that the next time the value is requested it is retrieved from
 a less expensive storage.
+
+
+
+
+
+## Cache and Cache collection
+
+The [Cache][] interface and [CacheCollection][] class implement a subset of the [Storage][]
+interface and [StorageCollection][] class, they only provide read-only features.
 
 
 
@@ -197,9 +240,11 @@ The package is continuously tested by [Travis CI](http://about.travis-ci.org/).
 [Redis]: http://redis.io/
 
 [documentation]:     http://api.icanboogie.org/storage/1.2/
-[RunTimeStorage]:    http://api.icanboogie.org/storage/1.2/class-ICanBoogie.Storage.RunTimeStorage.html
-[RedisStorage]:      http://api.icanboogie.org/storage/1.2/class-ICanBoogie.Storage.RedisStorage.html
 [APCStorage]:        http://api.icanboogie.org/storage/1.2/class-ICanBoogie.Storage.APCStorage.html
+[Cache]:             http://api.icanboogie.org/storage/1.2/class-ICanBoogie.Storage.Cache.html
+[Cachecollection]:   http://api.icanboogie.org/storage/1.2/class-ICanBoogie.Storage.CacheCollection.html
 [FileStorage]:       http://api.icanboogie.org/storage/1.2/class-ICanBoogie.Storage.FileStorage.html
+[RedisStorage]:      http://api.icanboogie.org/storage/1.2/class-ICanBoogie.Storage.RedisStorage.html
+[RunTimeStorage]:    http://api.icanboogie.org/storage/1.2/class-ICanBoogie.Storage.RunTimeStorage.html
 [Storage]:           http://api.icanboogie.org/storage/1.2/class-ICanBoogie.Storage.Storage.html
 [StorageCollection]: http://api.icanboogie.org/storage/1.2/class-ICanBoogie.Storage.StorageCollection.html

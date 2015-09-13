@@ -23,7 +23,7 @@ class CacheCollectionTest extends \PHPUnit_Framework_TestCase
 		$c1 = $this
 			->getMockBuilder(Cache::class)
 			->setMethods([ 'exists', 'retrieve' ])
-			->getMock();
+			->getMockForAbstractClass();
 		$c1
 			->expects($this->any())
 			->method('exists')
@@ -44,7 +44,7 @@ class CacheCollectionTest extends \PHPUnit_Framework_TestCase
 		$c2 = $this
 			->getMockBuilder(Cache::class)
 			->setMethods([ 'exists', 'retrieve' ])
-			->getMock();
+			->getMockForAbstractClass();
 		$c2
 			->expects($this->any())
 			->method('exists')
@@ -65,7 +65,7 @@ class CacheCollectionTest extends \PHPUnit_Framework_TestCase
 		$c3 = $this
 			->getMockBuilder(Cache::class)
 			->setMethods([ 'exists', 'retrieve' ])
-			->getMock();
+			->getMockForAbstractClass();
 		$c3
 			->expects($this->any())
 			->method('exists')

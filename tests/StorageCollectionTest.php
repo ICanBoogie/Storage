@@ -145,4 +145,19 @@ class StorageCollectionTest extends \PHPUnit_Framework_TestCase
 		$this->assertFalse(isset($collection[$k]));
 		$this->assertNull($collection[$k]);
 	}
+
+	public function test_find_by_type()
+	{
+		$this->assertSame($this->s1, $this->collection->find_by_type(RunTimeStorage::class));
+	}
+
+	public function test_find_by_type_undefined()
+	{
+		$this->assertNull($this->collection->find_by_type(RedisStorage::class));
+	}
+
+	public function test_iterator()
+	{
+		$this->assertInstanceOf(\Iterator::class, $this->collection->getIterator());
+	}
 }
