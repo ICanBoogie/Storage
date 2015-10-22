@@ -1,7 +1,7 @@
 # customization
 
 PACKAGE_NAME = icanboogie/storage
-PACKAGE_VERSION = 1.2.0
+PACKAGE_VERSION = 2.0.0
 
 # do not edit the following lines
 
