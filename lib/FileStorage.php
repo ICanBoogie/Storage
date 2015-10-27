@@ -300,6 +300,11 @@ class FileStorage implements Storage, \ArrayAccess
 	 */
 	public function getIterator()
 	{
+		if (!is_dir($this->path))
+		{
+			return;
+		}
+
 		$iterator = new \DirectoryIterator($this->path);
 
 		foreach ($iterator as $file)
