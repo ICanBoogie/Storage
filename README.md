@@ -21,6 +21,7 @@ The following storages are included in this package:
 - [RedisStorage][]: Uses a [Redis][] instance.
 - [APCStorage][]: Uses [APC][] or [APCu][].
 - [FileStorage][]: Uses the file system.
+- [JSONFileStorage][]: Uses the file system to store JSON files.
 - [StorageCollection][]: Uses a collection of storage.
 
 
@@ -242,8 +243,9 @@ The package is continuously tested by [Travis CI](http://about.travis-ci.org/).
 [documentation]:     http://api.icanboogie.org/storage/latest/
 [APCStorage]:        http://api.icanboogie.org/storage/latest/class-ICanBoogie.Storage.APCStorage.html
 [Cache]:             http://api.icanboogie.org/storage/latest/class-ICanBoogie.Storage.Cache.html
-[Cachecollection]:   http://api.icanboogie.org/storage/latest/class-ICanBoogie.Storage.CacheCollection.html
+[CacheCollection]:   http://api.icanboogie.org/storage/latest/class-ICanBoogie.Storage.CacheCollection.html
 [FileStorage]:       http://api.icanboogie.org/storage/latest/class-ICanBoogie.Storage.FileStorage.html
+[JSONFileStorage]:   http://api.icanboogie.org/storage/latest/class-ICanBoogie.Storage.JSONFileStorage.html
 [RedisStorage]:      http://api.icanboogie.org/storage/latest/class-ICanBoogie.Storage.RedisStorage.html
 [RunTimeStorage]:    http://api.icanboogie.org/storage/latest/class-ICanBoogie.Storage.RunTimeStorage.html
 [Storage]:           http://api.icanboogie.org/storage/latest/class-ICanBoogie.Storage.Storage.html
