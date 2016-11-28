@@ -22,7 +22,7 @@ class APCStorageTest extends \PHPUnit_Framework_TestCase
 
 	public function setUp()
 	{
-		if (!function_exists('apc_store'))
+		if (!APCStorage::is_available())
 		{
 			$this->markTestSkipped('The APC or APCu extension is not available.');
 		}

@@ -27,7 +27,7 @@ class APCStorage implements Storage, \ArrayAccess
 	 */
 	static public function is_available()
 	{
-		return extension_loaded('apc') && ini_get('apc.enabled');
+		return (extension_loaded('apc') || extension_loaded('apcu')) && ini_get('apc.enabled');
 	}
 
 	/**
@@ -48,7 +48,7 @@ class APCStorage implements Storage, \ArrayAccess
 	 */
 	public function exists($key)
 	{
-		return apc_exists($this->prefix . $key);
+		return apcu_exists($this->prefix . $key);
 	}
 
 	/**
@@ -56,7 +56,7 @@ class APCStorage implements Storage, \ArrayAccess
 	 */
 	public function retrieve($key)
 	{
-		$rc = apc_fetch($this->prefix . $key, $success);
+		$rc = apcu_fetch($this->prefix . $key, $success);
 
 		return $success ? $rc : null;
 	}
@@ -66,7 +66,7 @@ class APCStorage implements Storage, \ArrayAccess
 	 */
 	public function store($key, $data, $ttl = 0)
 	{
-		apc_store($this->prefix . $key, $data, $ttl);
+		apcu_store($this->prefix . $key, $data, $ttl);
 	}
 
 	/**
@@ -74,7 +74,7 @@ class APCStorage implements Storage, \ArrayAccess
 	 */
 	public function eliminate($key)
 	{
-		apc_delete($this->prefix . $key);
+		apcu_delete($this->prefix . $key);
 	}
 
 	/**
@@ -84,7 +84,7 @@ class APCStorage implements Storage, \ArrayAccess
 	{
 		foreach ($this->create_internal_iterator() as $key => $dummy)
 		{
-			apc_delete($key);
+			apcu_delete($key);
 		}
 	}
 
@@ -104,10 +104,10 @@ class APCStorage implements Storage, \ArrayAccess
 	/**
 	 * Creates internal iterator.
 	 *
-	 * @return \APCIterator
+	 * @return \APCUIterator
 	 */
 	private function create_internal_iterator()
 	{
-		return new \APCIterator('user', '/^' . preg_quote($this->prefix) . '/', APC_ITER_NONE);
+		return new \APCUIterator('/^' . preg_quote($this->prefix) . '/', APC_ITER_NONE);
 	}
 }
