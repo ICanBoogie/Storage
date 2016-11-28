@@ -21,7 +21,6 @@ The following storages are included in this package:
 - [RedisStorage][]: Uses a [Redis][] instance.
 - [APCStorage][]: Uses [APC][] or [APCu][].
 - [FileStorage][]: Uses the file system.
-- [JSONFileStorage][]: Uses the file system to store JSON files.
 - [StorageCollection][]: Uses a collection of storage.
 
 
@@ -103,6 +102,20 @@ defined: one
 defined: two
 defined: three
 ```
+
+
+
+
+
+### Codecs
+
+The [FileStorage][] storage uses _codecs_ to encode and decode data written to the filesystem. Any class
+implementing the [Codec][] interface can be used, the following are provided with the package:
+
+- [SerializeCodec][]: Uses `serialize()` and `unserialize()` to encode and decode data. It is used
+by default.
+
+- [JSONCodec][]: Uses `json_encode()` and `json_decode()` to encode and decode data.
 
 
 
@@ -244,9 +257,11 @@ The package is continuously tested by [Travis CI](http://about.travis-ci.org/).
 [APCStorage]:        http://api.icanboogie.org/storage/latest/class-ICanBoogie.Storage.APCStorage.html
 [Cache]:             http://api.icanboogie.org/storage/latest/class-ICanBoogie.Storage.Cache.html
 [CacheCollection]:   http://api.icanboogie.org/storage/latest/class-ICanBoogie.Storage.CacheCollection.html
+[Codec]:             http://api.icanboogie.org/storage/latest/class-ICanBoogie.Storage.Codec.html
 [FileStorage]:       http://api.icanboogie.org/storage/latest/class-ICanBoogie.Storage.FileStorage.html
-[JSONFileStorage]:   http://api.icanboogie.org/storage/latest/class-ICanBoogie.Storage.JSONFileStorage.html
+[JSONCodec]:         http://api.icanboogie.org/storage/latest/class-ICanBoogie.Storage.Codec.JSONCodec.html
 [RedisStorage]:      http://api.icanboogie.org/storage/latest/class-ICanBoogie.Storage.RedisStorage.html
 [RunTimeStorage]:    http://api.icanboogie.org/storage/latest/class-ICanBoogie.Storage.RunTimeStorage.html
+[SerializeCodec]:    http://api.icanboogie.org/storage/latest/class-ICanBoogie.Storage.Codec.SerializeCodec.html
 [Storage]:           http://api.icanboogie.org/storage/latest/class-ICanBoogie.Storage.Storage.html
 [StorageCollection]: http://api.icanboogie.org/storage/latest/class-ICanBoogie.Storage.StorageCollection.html

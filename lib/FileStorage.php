@@ -11,6 +11,8 @@
 
 namespace ICanBoogie\Storage;
 
+use ICanBoogie\Storage\Codec\SerializeCodec;
+
 /**
  * A storage using the file system.
  */
@@ -18,20 +20,6 @@ class FileStorage implements Storage, \ArrayAccess
 {
 	use Storage\ArrayAccess;
 	use Storage\ClearWithIterator;
-
-	/**
-	 * Magic pattern used to recognize automatically serialized values.
-	 *
-	 * @var string
-	 */
-	const MAGIC = "VAR\0SLZ\0";
-
-	/**
-	 * Length of the magic pattern {@link MAGIC}.
-	 *
-	 * @var int
-	 */
-	const MAGIC_LENGTH = 8;
 
 	static private $release_after;
 
@@ -43,13 +31,20 @@ class FileStorage implements Storage, \ArrayAccess
 	protected $path;
 
 	/**
+	 * @var Codec
+	 */
+	private $codec;
+
+	/**
 	 * Constructor.
 	 *
 	 * @param string $path Absolute path to the storage directory.
+	 * @param Codec $codec
 	 */
-	public function __construct($path)
+	public function __construct($path, Codec $codec = null)
 	{
 		$this->path = rtrim($path, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
+		$this->codec = $codec ?: new SerializeCodec;
 
 		if (self::$release_after === null)
 		{
@@ -198,17 +193,7 @@ class FileStorage implements Storage, \ArrayAccess
 	 */
 	protected function serialize($value)
 	{
-		#
-		# If the value is an array or a string it is serialized and prepended with a magic
-		# identifier.
-		#
-
-		if (is_array($value) || is_object($value))
-		{
-			return self::MAGIC . serialize($value);
-		}
-
-		return $value;
+		return $this->codec->encode($value);
 	}
 
 	/**
@@ -220,12 +205,7 @@ class FileStorage implements Storage, \ArrayAccess
 	 */
 	protected function unserialize($value)
 	{
-		if (substr($value, 0, self::MAGIC_LENGTH) == self::MAGIC)
-		{
-			return unserialize(substr($value, self::MAGIC_LENGTH));
-		}
-
-		return $value;
+		return $this->codec->decode($value);
 	}
 
 	/**
