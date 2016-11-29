@@ -82,10 +82,7 @@ class APCStorage implements Storage, \ArrayAccess
 	 */
 	public function clear()
 	{
-		foreach ($this->create_internal_iterator() as $key => $dummy)
-		{
-			apcu_delete($key);
-		}
+		apcu_delete($this->create_internal_iterator());
 	}
 
 	/**

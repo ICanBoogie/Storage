@@ -37,11 +37,31 @@ if (!function_exists('apcu_delete'))
 {
 	function apcu_delete($key)
 	{
+		if ($key instanceof APCUIterator)
+		{
+			$key = array_keys(iterator_to_array($key));
+		}
+
+		if (is_array($key))
+		{
+			$failure = false;
+
+			foreach ($key as $k)
+			{
+				if (apc_delete($k) === false)
+				{
+					$failure = true;
+				}
+			}
+
+			return !$failure;
+		}
+
 		return apc_delete($key);
 	}
 }
 
-if (!class_exists(APCUIterator::class))
+if (!class_exists(APCUIterator::class, false) && class_exists(APCIterator::class, false))
 {
 	class APCUIterator extends APCIterator
 	{
