@@ -9,21 +9,21 @@
  * file that was distributed with this source code.
  */
 
-namespace ICanBoogie\Storage\Adapter;
+namespace ICanBoogie\Storage\FileStorage\Adapter;
 
-use ICanBoogie\Storage\Adapter;
+use ICanBoogie\Storage\FileStorage\Adapter;
 
 /**
- * Data is encoded and decoded with `serialize()` and `unserialize()`.
+ * Date is encoded and decoded with `json_encode()` and `json_decode()`.
  */
-class SerializeAdapter implements Adapter
+class JSONAdapter implements Adapter
 {
 	/**
 	 * @inheritdoc
 	 */
 	public function write($filename, $data)
 	{
-		return file_put_contents($filename, serialize($data));
+		return file_put_contents($filename, json_encode($data));
 	}
 
 	/**
@@ -31,6 +31,6 @@ class SerializeAdapter implements Adapter
 	 */
 	public function read($filename)
 	{
-		return unserialize(file_get_contents($filename));
+		return json_decode(file_get_contents($filename), true);
 	}
 }

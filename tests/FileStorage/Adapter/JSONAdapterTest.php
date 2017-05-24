@@ -9,15 +9,15 @@
  * file that was distributed with this source code.
  */
 
-namespace ICanBoogie\Storage\Adapter;
+namespace ICanBoogie\Storage\FileStorage\Adapter;
 
-class SerializeAdapterTest extends TestCase
+class JSONAdapterTest extends TestCase
 {
 	/**
 	 * @inheritdoc
 	 */
 	protected function getAdapter()
 	{
-		return new SerializeAdapter();
+		return new JSONAdapter();
 	}
 }

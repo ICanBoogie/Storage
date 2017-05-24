@@ -254,12 +254,12 @@ The package is continuously tested by [Travis CI](http://about.travis-ci.org/).
 [APCStorage]:        https://icanboogie.org/api/storage/master/class-ICanBoogie.Storage.APCStorage.html
 [Cache]:             https://icanboogie.org/api/storage/master/class-ICanBoogie.Storage.Cache.html
 [CacheCollection]:   https://icanboogie.org/api/storage/master/class-ICanBoogie.Storage.CacheCollection.html
-[Adapter]:           https://icanboogie.org/api/storage/master/class-ICanBoogie.Storage.Adapter.html
 [FileStorage]:       https://icanboogie.org/api/storage/master/class-ICanBoogie.Storage.FileStorage.html
-[JSONAdapter]:       https://icanboogie.org/api/storage/master/class-ICanBoogie.Storage.Adapter.JSONAdapter.html
+[Adapter]:           https://icanboogie.org/api/storage/master/class-ICanBoogie.Storage.FileStorage.Adapter.html
+[JSONAdapter]:       https://icanboogie.org/api/storage/master/class-ICanBoogie.Storage.FileStorage.Adapter.JSONAdapter.html
+[SerializeAdapter]:  https://icanboogie.org/api/storage/master/class-ICanBoogie.Storage.FileStorage.Adapter.SerializeAdapter.html
 [RedisStorage]:      https://icanboogie.org/api/storage/master/class-ICanBoogie.Storage.RedisStorage.html
 [RunTimeStorage]:    https://icanboogie.org/api/storage/master/class-ICanBoogie.Storage.RunTimeStorage.html
-[SerializeAdapter]:  https://icanboogie.org/api/storage/master/class-ICanBoogie.Storage.Codec.SerializeCodec.html
 [Storage]:           https://icanboogie.org/api/storage/master/class-ICanBoogie.Storage.Storage.html
 [ArrayAccess]:       https://icanboogie.org/api/storage/master/class-ICanBoogie.Storage.Storage.ArrayAccess.html
 [StorageCollection]: https://icanboogie.org/api/storage/master/class-ICanBoogie.Storage.StorageCollection.html

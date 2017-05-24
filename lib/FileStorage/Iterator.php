@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace ICanBoogie\Storage;
+namespace ICanBoogie\Storage\FileStorage;
 
 /**
  * Iterates through a file storage.
@@ -18,7 +18,7 @@ namespace ICanBoogie\Storage;
  *
  * The iterator can also be used to delete matching keys.
  */
-class FileStorageIterator implements \Iterator
+class Iterator implements \Iterator
 {
 	/**
 	 * Iterator.
@@ -27,6 +27,9 @@ class FileStorageIterator implements \Iterator
 	 */
 	protected $iterator;
 
+	/**
+	 * @param \Iterator $iterator
+	 */
 	public function __construct(\Iterator $iterator)
 	{
 		$this->iterator = $iterator;

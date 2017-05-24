@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace ICanBoogie\Storage;
+namespace ICanBoogie\Storage\FileStorage;
 
 /**
  * An interface for classes capable of encoding and decoding data when it is stored and

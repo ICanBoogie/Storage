@@ -11,7 +11,9 @@
 
 namespace ICanBoogie\Storage;
 
-use ICanBoogie\Storage\Adapter\SerializeAdapter;
+use ICanBoogie\Storage\FileStorage\Adapter;
+use ICanBoogie\Storage\FileStorage\Adapter\SerializeAdapter;
+use ICanBoogie\Storage\FileStorage\Iterator;
 
 /**
  * A storage using the file system.
@@ -298,11 +300,11 @@ class FileStorage implements Storage, \ArrayAccess
 	 *
 	 * @param string $regex
 	 *
-	 * @return FileStorageIterator
+	 * @return Iterator
 	 */
 	public function matching($regex)
 	{
-		return new FileStorageIterator(new \RegexIterator(new \DirectoryIterator($this->path), $regex));
+		return new Iterator(new \RegexIterator(new \DirectoryIterator($this->path), $regex));
 	}
 
 	private $is_writable;

@@ -1,8 +1,8 @@
 <?php
 
-namespace ICanBoogie\Storage\Adapter;
+namespace ICanBoogie\Storage\FileStorage\Adapter;
 
-use ICanBoogie\Storage\Adapter;
+use ICanBoogie\Storage\FileStorage\Adapter;
 
 abstract class TestCase extends \PHPUnit_Framework_TestCase
 {
