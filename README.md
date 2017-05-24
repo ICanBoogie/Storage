@@ -1,10 +1,10 @@
 # Storage
 
 [![Release](https://img.shields.io/packagist/v/icanboogie/storage.svg)](https://github.com/ICanBoogie/Storage/releases)
-[![Build Status](https://img.shields.io/travis/ICanBoogie/Storage/master.svg)](http://travis-ci.org/ICanBoogie/Storage)
+[![Build Status](https://img.shields.io/travis/ICanBoogie/Storage.svg)](http://travis-ci.org/ICanBoogie/Storage)
 [![HHVM](https://img.shields.io/hhvm/icanboogie/storage.svg)](http://hhvm.h4cc.de/package/icanboogie/storage)
-[![Code Quality](https://img.shields.io/scrutinizer/g/ICanBoogie/Storage/master.svg)](https://scrutinizer-ci.com/g/ICanBoogie/Storage/?branch=master)
-[![Code Coverage](https://img.shields.io/coveralls/ICanBoogie/Storage/master.svg)](https://coveralls.io/r/ICanBoogie/Storage)
+[![Code Quality](https://img.shields.io/scrutinizer/g/ICanBoogie/Storage.svg)](https://scrutinizer-ci.com/g/ICanBoogie/Storage/?branch=master)
+[![Code Coverage](https://img.shields.io/coveralls/ICanBoogie/Storage.svg)](https://coveralls.io/r/ICanBoogie/Storage)
 [![Packagist](https://img.shields.io/packagist/dt/icanboogie/storage.svg)](https://packagist.org/packages/icanboogie/storage)
 
 The **icanboogie/storage** package defines an API to store and retrieve values, while offering
@@ -15,7 +15,7 @@ Storage collections are used to retrieve and store values using multiple differe
 storage instances, that usually range from the less expensive (and the more volatile) to the
 more expensive (and the more durable).
 
-The following storages are included in this package:
+The following storage are included in this package:
 
 - [RunTimeStorage][]: Uses a PHP array.
 - [RedisStorage][]: Uses a [Redis][] instance.
@@ -232,8 +232,8 @@ the `make clean` command.
 
 The package is continuously tested by [Travis CI](http://about.travis-ci.org/).
 
-[![Build Status](https://img.shields.io/travis/ICanBoogie/Storage/master.svg)](https://travis-ci.org/ICanBoogie/Storage)
-[![Code Coverage](https://img.shields.io/coveralls/ICanBoogie/Storage/master.svg)](https://coveralls.io/r/ICanBoogie/Storage)
+[![Build Status](https://img.shields.io/travis/ICanBoogie/Storage.svg)](https://travis-ci.org/ICanBoogie/Storage)
+[![Code Coverage](https://img.shields.io/coveralls/ICanBoogie/Storage.svg)](https://coveralls.io/r/ICanBoogie/Storage)
 
 
 
@@ -249,19 +249,19 @@ The package is continuously tested by [Travis CI](http://about.travis-ci.org/).
 
 [APC]: http://php.net/manual/en/book.apc.php
 [APCu]: https://github.com/krakjoe/apcu
-[ArrayAccessTrait]: http://icanboogie.org/docs/namespace-ICanBoogie.Storage.ArrayAccessTrait.html
 [ICanBoogie]: https://github.com/ICanBoogie/ICanBoogie
 [Redis]: http://redis.io/
 
-[documentation]:     http://api.icanboogie.org/storage/latest/
-[APCStorage]:        http://api.icanboogie.org/storage/latest/class-ICanBoogie.Storage.APCStorage.html
-[Cache]:             http://api.icanboogie.org/storage/latest/class-ICanBoogie.Storage.Cache.html
-[CacheCollection]:   http://api.icanboogie.org/storage/latest/class-ICanBoogie.Storage.CacheCollection.html
-[Codec]:             http://api.icanboogie.org/storage/latest/class-ICanBoogie.Storage.Codec.html
-[FileStorage]:       http://api.icanboogie.org/storage/latest/class-ICanBoogie.Storage.FileStorage.html
-[JSONCodec]:         http://api.icanboogie.org/storage/latest/class-ICanBoogie.Storage.Codec.JSONCodec.html
-[RedisStorage]:      http://api.icanboogie.org/storage/latest/class-ICanBoogie.Storage.RedisStorage.html
-[RunTimeStorage]:    http://api.icanboogie.org/storage/latest/class-ICanBoogie.Storage.RunTimeStorage.html
-[SerializeCodec]:    http://api.icanboogie.org/storage/latest/class-ICanBoogie.Storage.Codec.SerializeCodec.html
-[Storage]:           http://api.icanboogie.org/storage/latest/class-ICanBoogie.Storage.Storage.html
-[StorageCollection]: http://api.icanboogie.org/storage/latest/class-ICanBoogie.Storage.StorageCollection.html
+[documentation]:     https://icanboogie.org/api/storage/master/
+[APCStorage]:        https://icanboogie.org/api/storage/master/class-ICanBoogie.Storage.APCStorage.html
+[Cache]:             https://icanboogie.org/api/storage/master/class-ICanBoogie.Storage.Cache.html
+[CacheCollection]:   https://icanboogie.org/api/storage/master/class-ICanBoogie.Storage.CacheCollection.html
+[Codec]:             https://icanboogie.org/api/storage/master/class-ICanBoogie.Storage.Codec.html
+[FileStorage]:       https://icanboogie.org/api/storage/master/class-ICanBoogie.Storage.FileStorage.html
+[JSONCodec]:         https://icanboogie.org/api/storage/master/class-ICanBoogie.Storage.Codec.JSONCodec.html
+[RedisStorage]:      https://icanboogie.org/api/storage/master/class-ICanBoogie.Storage.RedisStorage.html
+[RunTimeStorage]:    https://icanboogie.org/api/storage/master/class-ICanBoogie.Storage.RunTimeStorage.html
+[SerializeCodec]:    https://icanboogie.org/api/storage/master/class-ICanBoogie.Storage.Codec.SerializeCodec.html
+[Storage]:           https://icanboogie.org/api/storage/master/class-ICanBoogie.Storage.Storage.html
+[ArrayAccess]:       https://icanboogie.org/api/storage/master/class-ICanBoogie.Storage.Storage.ArrayAccess.html
+[StorageCollection]: https://icanboogie.org/api/storage/master/class-ICanBoogie.Storage.StorageCollection.html
