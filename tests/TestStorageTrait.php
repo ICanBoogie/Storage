@@ -70,6 +70,6 @@ trait TestStorageTrait
 		sort($k);
 		sort($kk);
 
-		$this->assertSame($k, $kk);
+		$this->assertEquals($k, $kk);
 	}
 }
