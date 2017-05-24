@@ -1,7 +1,7 @@
 # customization
 
 PACKAGE_NAME = icanboogie/storage
-PACKAGE_VERSION = 2.1.0
+PACKAGE_VERSION = 3.0.0
 PHPUNIT_VERSION = phpunit-4.8.phar
 PHPUNIT_FILENAME = build/$(PHPUNIT_VERSION)
 PHPUNIT = php $(PHPUNIT_FILENAME)

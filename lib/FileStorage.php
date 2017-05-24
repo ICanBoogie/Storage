@@ -11,7 +11,7 @@
 
 namespace ICanBoogie\Storage;
 
-use ICanBoogie\Storage\Codec\SerializeCodec;
+use ICanBoogie\Storage\Adapter\SerializeAdapter;
 
 /**
  * A storage using the file system.
@@ -31,20 +31,20 @@ class FileStorage implements Storage, \ArrayAccess
 	protected $path;
 
 	/**
-	 * @var Codec
+	 * @var Adapter
 	 */
-	private $codec;
+	private $adapter;
 
 	/**
 	 * Constructor.
 	 *
 	 * @param string $path Absolute path to the storage directory.
-	 * @param Codec $codec
+	 * @param Adapter $adapter
 	 */
-	public function __construct($path, Codec $codec = null)
+	public function __construct($path, Adapter $adapter = null)
 	{
 		$this->path = rtrim($path, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
-		$this->codec = $codec ?: new SerializeCodec;
+		$this->adapter = $adapter ?: new SerializeAdapter;
 
 		if (self::$release_after === null)
 		{
@@ -77,7 +77,7 @@ class FileStorage implements Storage, \ArrayAccess
 			return $default;
 		}
 
-		return $this->unserialize(file_get_contents($pathname));
+		return $this->read($pathname);
 	}
 
 	/**
@@ -121,7 +121,7 @@ class FileStorage implements Storage, \ArrayAccess
 
 		try
 		{
-			$this->safe_store($pathname, $this->serialize($value));
+			$this->safe_store($pathname, $value);
 		}
 		catch (\Exception $e)
 		{
@@ -185,27 +185,22 @@ class FileStorage implements Storage, \ArrayAccess
 	}
 
 	/**
-	 * Serializes a value so that it can be stored.
+	 * @param string $pathname
 	 *
-	 * @param mixed $value
-	 *
-	 * @return string
+	 * @return bool|string
 	 */
-	protected function serialize($value)
+	private function read($pathname)
 	{
-		return $this->codec->encode($value);
+		return $this->adapter->read($pathname);
 	}
 
 	/**
-	 * Unserializes a value retrieved from storage.
-	 *
-	 * @param string $value
-	 *
-	 * @return mixed
+	 * @param string $pathname
+	 * @param mixed $value
 	 */
-	protected function unserialize($value)
+	private function write($pathname, $value)
 	{
-		return $this->codec->decode($value);
+		$this->adapter->write($pathname, $value);
 	}
 
 	/**
@@ -240,7 +235,7 @@ class FileStorage implements Storage, \ArrayAccess
 			throw new \Exception("Unable to get to exclusive lock on $pathname.");
 		}
 
-		file_put_contents($tmp_pathname, $value);
+		$this->write($tmp_pathname, $value);
 
 		#
 		# Windows, this is for you

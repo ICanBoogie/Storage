@@ -9,7 +9,15 @@
  * file that was distributed with this source code.
  */
 
-define('ICanBoogie\Storage\SANDBOX_DIR', __DIR__ . '/sandbox');
+namespace ICanBoogie\Storage\Adapter;
 
-require __DIR__ . '/../vendor/autoload.php';
-require 'TestStorageTrait.php';
+class JSONAdapterTest extends TestCase
+{
+	/**
+	 * @inheritdoc
+	 */
+	protected function getAdapter()
+	{
+		return new JSONAdapter();
+	}
+}

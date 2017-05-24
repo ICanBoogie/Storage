@@ -2,7 +2,11 @@
 	"name": "icanboogie/storage",
 	"type": "library",
 	"description": "Store and retrieve values, using different/multiple storage backends.",
-	"keywords": [ "store", "retrieve", "cache" ],
+	"keywords": [
+		"store",
+		"retrieve",
+		"cache"
+	],
 	"homepage": "https://icanboogie.org/",
 	"license": "BSD-3-Clause",
 	"authors": [
@@ -10,7 +14,7 @@
 			"name": "Olivier Laviale",
 			"email": "olivier.laviale@gmail.com",
 			"homepage": "https://olvlvl.com/",
-			"role" : "Developer"
+			"role": "Developer"
 		}
 	],
 	"support": {
@@ -27,5 +31,10 @@
 		"files": [
 			"polyfills.php"
 		]
+	},
+	"autoload-dev": {
+		"psr-4": {
+			"ICanBoogie\\Storage\\": "tests/"
+		}
 	}
 }

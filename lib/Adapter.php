@@ -15,19 +15,20 @@ namespace ICanBoogie\Storage;
  * An interface for classes capable of encoding and decoding data when it is stored and
  * retrieved from a storage.
  */
-interface Codec
+interface Adapter
 {
 	/**
+	 * @param string $filename
 	 * @param mixed $data
 	 *
 	 * @return mixed
 	 */
-	public function encode($data);
+	public function write($filename, $data);
 
 	/**
-	 * @param mixed $data
+	 * @param string $filename
 	 *
 	 * @return mixed
 	 */
-	public function decode($data);
+	public function read($filename);
 }

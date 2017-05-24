@@ -106,15 +106,16 @@ defined: three
 
 
 
-### Codecs
+### Adapter
 
-The [FileStorage][] storage uses _codecs_ to encode and decode data written to the filesystem. Any class
-implementing the [Codec][] interface can be used, the following are provided with the package:
+The [FileStorage][] storage uses _adapters_ to write and read data written to the filesystem. Any
+class implementing the [Adapter][] interface can be used, the following are provided with the
+package:
 
-- [SerializeCodec][]: Uses `serialize()` and `unserialize()` to encode and decode data. It is used
+- [SerializeAdapter][]: Uses `serialize()` and `unserialize()` to encode and decode data. It is used
 by default.
 
-- [JSONCodec][]: Uses `json_encode()` and `json_decode()` to encode and decode data.
+- [JSONAdapter][]: Uses `json_encode()` and `json_decode()` to encode and decode data.
 
 
 
@@ -253,12 +254,12 @@ The package is continuously tested by [Travis CI](http://about.travis-ci.org/).
 [APCStorage]:        https://icanboogie.org/api/storage/master/class-ICanBoogie.Storage.APCStorage.html
 [Cache]:             https://icanboogie.org/api/storage/master/class-ICanBoogie.Storage.Cache.html
 [CacheCollection]:   https://icanboogie.org/api/storage/master/class-ICanBoogie.Storage.CacheCollection.html
-[Codec]:             https://icanboogie.org/api/storage/master/class-ICanBoogie.Storage.Codec.html
+[Adapter]:           https://icanboogie.org/api/storage/master/class-ICanBoogie.Storage.Adapter.html
 [FileStorage]:       https://icanboogie.org/api/storage/master/class-ICanBoogie.Storage.FileStorage.html
-[JSONCodec]:         https://icanboogie.org/api/storage/master/class-ICanBoogie.Storage.Codec.JSONCodec.html
+[JSONAdapter]:       https://icanboogie.org/api/storage/master/class-ICanBoogie.Storage.Adapter.JSONAdapter.html
 [RedisStorage]:      https://icanboogie.org/api/storage/master/class-ICanBoogie.Storage.RedisStorage.html
 [RunTimeStorage]:    https://icanboogie.org/api/storage/master/class-ICanBoogie.Storage.RunTimeStorage.html
-[SerializeCodec]:    https://icanboogie.org/api/storage/master/class-ICanBoogie.Storage.Codec.SerializeCodec.html
+[SerializeAdapter]:  https://icanboogie.org/api/storage/master/class-ICanBoogie.Storage.Codec.SerializeCodec.html
 [Storage]:           https://icanboogie.org/api/storage/master/class-ICanBoogie.Storage.Storage.html
 [ArrayAccess]:       https://icanboogie.org/api/storage/master/class-ICanBoogie.Storage.Storage.ArrayAccess.html
 [StorageCollection]: https://icanboogie.org/api/storage/master/class-ICanBoogie.Storage.StorageCollection.html
