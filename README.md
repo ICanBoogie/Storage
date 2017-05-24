@@ -117,6 +117,8 @@ by default.
 
 - [JSONAdapter][]: Uses `json_encode()` and `json_decode()` to encode and decode data.
 
+- [PHPAdapter][]: Uses `var_export()` and `require` to encode and read data.
+
 
 
 
@@ -258,6 +260,7 @@ The package is continuously tested by [Travis CI](http://about.travis-ci.org/).
 [Adapter]:           https://icanboogie.org/api/storage/master/class-ICanBoogie.Storage.FileStorage.Adapter.html
 [JSONAdapter]:       https://icanboogie.org/api/storage/master/class-ICanBoogie.Storage.FileStorage.Adapter.JSONAdapter.html
 [SerializeAdapter]:  https://icanboogie.org/api/storage/master/class-ICanBoogie.Storage.FileStorage.Adapter.SerializeAdapter.html
+[PHPAdapter]:        https://icanboogie.org/api/storage/master/class-ICanBoogie.Storage.FileStorage.Adapter.PHPAdapter.html
 [RedisStorage]:      https://icanboogie.org/api/storage/master/class-ICanBoogie.Storage.RedisStorage.html
 [RunTimeStorage]:    https://icanboogie.org/api/storage/master/class-ICanBoogie.Storage.RunTimeStorage.html
 [Storage]:           https://icanboogie.org/api/storage/master/class-ICanBoogie.Storage.Storage.html
