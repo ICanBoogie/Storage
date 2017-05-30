@@ -93,7 +93,7 @@ $storage['three'] = 3;
 
 foreach ($storage as $key)
 {
-	echo "defined: $key\n";
+    echo "defined: $key\n";
 }
 ```
 
@@ -140,10 +140,10 @@ use ICanBoogie\Storage\FileStorage;
 
 $storage = new StorageCollection([
 
-	new RunTimeStorage,
-	new APCStorage('my-prefix'),
-	new RedisStorage($redis_client, 'my-prefix'),
-	new FileStorage('/path/to/directory')
+    new RunTimeStorage,
+    new APCStorage('my-prefix'),
+    new RedisStorage($redis_client, 'my-prefix'),
+    new FileStorage('/path/to/directory')
 
 ]);
 ```
@@ -192,9 +192,7 @@ The package requires PHP 5.5 or later.
 
 The recommended way to install this package is through [Composer](http://getcomposer.org/):
 
-```
-composer require icanboogie/storage
-```
+    $ composer require icanboogie/storage
 
 
 
@@ -205,7 +203,7 @@ composer require icanboogie/storage
 The package is [available on GitHub](https://github.com/ICanBoogie/Storage), its repository can be
 cloned with the following command line:
 
-	$ git clone https://github.com/ICanBoogie/Storage.git
+    $ git clone https://github.com/ICanBoogie/Storage.git
 
 
 
