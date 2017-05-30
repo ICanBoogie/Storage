@@ -2,7 +2,6 @@
 
 [![Release](https://img.shields.io/packagist/v/icanboogie/storage.svg)](https://github.com/ICanBoogie/Storage/releases)
 [![Build Status](https://img.shields.io/travis/ICanBoogie/Storage.svg)](http://travis-ci.org/ICanBoogie/Storage)
-[![HHVM](https://img.shields.io/hhvm/icanboogie/storage.svg)](http://hhvm.h4cc.de/package/icanboogie/storage)
 [![Code Quality](https://img.shields.io/scrutinizer/g/ICanBoogie/Storage.svg)](https://scrutinizer-ci.com/g/ICanBoogie/Storage/?branch=master)
 [![Code Coverage](https://img.shields.io/coveralls/ICanBoogie/Storage.svg)](https://coveralls.io/r/ICanBoogie/Storage)
 [![Packagist](https://img.shields.io/packagist/dt/icanboogie/storage.svg)](https://packagist.org/packages/icanboogie/storage)
