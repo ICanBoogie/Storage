@@ -16,19 +16,9 @@ namespace ICanBoogie\Storage;
  *
  * @package ICanBoogie\Storage
  */
-class StorageCollection extends CacheCollection implements Storage, \ArrayAccess, \IteratorAggregate
+class StorageCollection extends CacheCollection implements Storage, \ArrayAccess
 {
 	use Storage\ArrayAccess;
-
-	/**
-	 * @var Storage[]
-	 */
-	protected $collection = [];
-
-	public function __construct(array $collection)
-	{
-		$this->collection = $collection;
-	}
 
 	/**
 	 * @inheritdoc
@@ -42,14 +32,14 @@ class StorageCollection extends CacheCollection implements Storage, \ArrayAccess
 
 		foreach ($this->collection as $storage)
 		{
-            $value = $storage->retrieve($key);
+			$value = $storage->retrieve($key);
 
 			if ($value !== null)
 			{
 				break;
 			}
 
-            $update[] = $storage;
+			$update[] = $storage;
 		}
 
 		if ($value === null)

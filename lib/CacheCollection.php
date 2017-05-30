@@ -23,6 +23,9 @@ class CacheCollection implements Cache
 	 */
 	protected $collection = [];
 
+	/**
+	 * @param Cache[] $collection
+	 */
 	public function __construct(array $collection)
 	{
 		$this->collection = $collection;
