@@ -82,7 +82,7 @@ class RedisStorage implements Storage, \ArrayAccess
 	 */
 	public function eliminate($key)
 	{
-		$this->redis->delete($this->prefix . $key);
+		$this->redis->del($this->prefix . $key);
 	}
 
 	/**
