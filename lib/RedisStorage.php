@@ -57,7 +57,7 @@ class RedisStorage implements Storage, \ArrayAccess
 	 */
 	public function exists($key)
 	{
-		return $this->redis->exists($this->prefix . $key);
+		return (bool) $this->redis->exists($this->prefix . $key);
 	}
 
 	/**
