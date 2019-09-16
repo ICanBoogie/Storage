@@ -25,11 +25,8 @@ class Iterator implements \Iterator
 	 *
 	 * @var \Iterator
 	 */
-	protected $iterator;
+	private $iterator;
 
-	/**
-	 * @param \Iterator $iterator
-	 */
 	public function __construct(\Iterator $iterator)
 	{
 		$this->iterator = $iterator;
@@ -39,10 +36,8 @@ class Iterator implements \Iterator
 	 * Returns the directory iterator.
 	 *
 	 * Dot files are skipped.
-	 *
-	 * @return \DirectoryIterator
 	 */
-	public function current()
+	public function current(): \DirectoryIterator
 	{
 		$file = $this->iterator->current();
 

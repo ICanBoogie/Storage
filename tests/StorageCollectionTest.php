@@ -11,7 +11,9 @@
 
 namespace ICanBoogie\Storage;
 
-class StorageCollectionTest extends \PHPUnit_Framework_TestCase
+use PHPUnit\Framework\TestCase;
+
+class StorageCollectionTest extends TestCase
 {
 	/**
 	 * @var StorageCollection

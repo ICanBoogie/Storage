@@ -18,17 +18,12 @@ namespace ICanBoogie\Storage\FileStorage;
 interface Adapter
 {
 	/**
-	 * @param string $filename
 	 * @param mixed $data
-	 *
-	 * @return mixed
 	 */
-	public function write($filename, $data);
+	public function write(string $filename, $data): bool;
 
 	/**
-	 * @param string $filename
-	 *
 	 * @return mixed
 	 */
-	public function read($filename);
+	public function read(string $filename);
 }

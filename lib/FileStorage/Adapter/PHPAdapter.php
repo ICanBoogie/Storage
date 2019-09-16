@@ -21,7 +21,7 @@ class PHPAdapter implements Adapter
 	/**
 	 * @inheritdoc
 	 */
-	public function write($filename, $data)
+	public function write(string $filename, $data): bool
 	{
 		$code = var_export($data, true);
 		$data = <<<EOT
@@ -34,7 +34,7 @@ EOT;
 	/**
 	 * @inheritdoc
 	 */
-	public function read($filename)
+	public function read(string $filename)
 	{
 		return require $filename;
 	}

@@ -1,8 +1,8 @@
 # customization
 
 PACKAGE_NAME = icanboogie/storage
-PACKAGE_VERSION = 3.0.0
-PHPUNIT_VERSION = phpunit-4.8.phar
+PACKAGE_VERSION = 4.0.0
+PHPUNIT_VERSION = phpunit-7.5.phar
 PHPUNIT_FILENAME = build/$(PHPUNIT_VERSION)
 PHPUNIT = php $(PHPUNIT_FILENAME)
 
@@ -39,6 +39,15 @@ test-coveralls: test-dependencies
 	COMPOSER_ROOT_VERSION=$(PACKAGE_VERSION) composer require satooshi/php-coveralls
 	@$(PHPUNIT) --coverage-clover build/logs/clover.xml
 	php vendor/bin/php-coveralls -v
+
+test-container:
+	@docker-compose \
+		-p icanboogie-storage-test \
+		run --rm app bash
+
+	@docker-compose \
+		-p icanboogie-storage-test \
+		down -v
 
 doc: vendor
 	@mkdir -p build/docs

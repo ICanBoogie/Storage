@@ -2,7 +2,9 @@
 
 namespace ICanBoogie\Storage;
 
-class FileStorageTest extends \PHPUnit_Framework_TestCase
+use PHPUnit\Framework\TestCase;
+
+final class FileStorageTest extends TestCase
 {
 	use TestStorageTrait;
 

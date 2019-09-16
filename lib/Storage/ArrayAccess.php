@@ -13,15 +13,13 @@ namespace ICanBoogie\Storage\Storage;
 
 /**
  * A trait for storage implementing {@link \ArrayAccess}.
- *
- * @package ICanBoogie\Storage
  */
 trait ArrayAccess
 {
-	abstract public function store($key, $value, $ttl = null);
-	abstract public function retrieve($key);
-	abstract public function exists($key);
-	abstract public function eliminate($key);
+	abstract public function store(string $key, $value, int $ttl = null);
+	abstract public function retrieve(string $key);
+	abstract public function exists(string $key): bool;
+	abstract public function eliminate(string $key): void;
 
 	/**
 	 * Alias to {@link store()}.

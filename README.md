@@ -9,12 +9,11 @@
 The **icanboogie/storage** package defines an API to store and retrieve values, while offering
 different storage backends.
 
-Values can be stored using the runtime memory, [Redis][], [APC][], the file system…
-Storage collections are used to retrieve and store values using multiple different
-storage instances, that usually range from the less expensive (and the more volatile) to the
-more expensive (and the more durable).
+Values can be stored using the runtime memory, [Redis][], [APC][], the file system… Storage
+collections retrieve and store values using multiple different storage instances, that usually range
+from the less expensive (and the more volatile) to the more expensive (and the more durable).
 
-The following storage are included in this package:
+This package includes the following storage adapters:
 
 - [RunTimeStorage][]: Uses a PHP array.
 - [RedisStorage][]: Uses a [Redis][] instance.
@@ -184,7 +183,7 @@ interface and [StorageCollection][] class, they only provide read-only features.
 
 ## Requirements
 
-The package requires PHP 5.5 or later.
+The package requires PHP 7.1 or later.
 
 
 

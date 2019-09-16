@@ -18,26 +18,18 @@ interface Cache extends \IteratorAggregate
 {
 	/**
 	 * Checks if a key exists in a storage.
-	 *
-	 * @param $key
-	 *
-	 * @return bool `true` if the key exists, `false` otherwise.
 	 */
-	public function exists($key);
+	public function exists(string $key): bool;
 
 	/**
 	 * Retrieves a value.
 	 *
-	 * @param string $key The key of the value.
-	 *
 	 * @return mixed|null The value associated with the key, or `null` if the key doesn't exists.
 	 */
-	public function retrieve($key);
+	public function retrieve(string $key);
 
 	/**
 	 * @inheritdoc
-	 *
-	 * @return \Iterator
 	 */
-	public function getIterator();
+	public function getIterator(): iterable;
 }

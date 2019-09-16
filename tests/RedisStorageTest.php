@@ -11,7 +11,9 @@
 
 namespace ICanBoogie\Storage;
 
-class RedisStorageTest extends \PHPUnit_Framework_TestCase
+use PHPUnit\Framework\TestCase;
+
+class RedisStorageTest extends TestCase
 {
 	use TestStorageTrait;
 
@@ -33,7 +35,7 @@ class RedisStorageTest extends \PHPUnit_Framework_TestCase
 		}
 
 		$redis = new \Redis;
-		$redis->connect('127.0.0.1', 6379);
+		$redis->connect(getenv('REDIS_HOST') ?: '127.0.0.1', 6379);
 		$version = $redis->info()['redis_version'];
 
 		if (version_compare($version, '2.8', '<'))

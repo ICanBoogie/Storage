@@ -13,8 +13,6 @@ namespace ICanBoogie\Storage;
 
 /**
  * A collection of {@link Cache} instances.
- *
- * @package ICanBoogie\Storage
  */
 class CacheCollection implements Cache
 {
@@ -34,7 +32,7 @@ class CacheCollection implements Cache
 	/**
 	 * @inheritdoc
 	 */
-	public function exists($key)
+	public function exists(string $key): bool
 	{
 		foreach ($this->collection as $cache)
 		{
@@ -50,7 +48,7 @@ class CacheCollection implements Cache
 	/**
 	 * @inheritdoc
 	 */
-	public function retrieve($key)
+	public function retrieve(string $key)
 	{
 		foreach ($this->collection as $cache)
 		{
@@ -66,7 +64,7 @@ class CacheCollection implements Cache
 	/**
 	 * @inheritdoc
 	 */
-	public function getIterator()
+	public function getIterator(): iterable
 	{
 		return reset($this->collection)->getIterator();
 	}
@@ -78,7 +76,7 @@ class CacheCollection implements Cache
 	 *
 	 * @return Cache|null The cache matching the specified type or `null` if none match.
 	 */
-	public function find_by_type($type)
+	public function find_by_type(string $type): ?Cache
 	{
 		foreach ($this->collection as $cache)
 		{

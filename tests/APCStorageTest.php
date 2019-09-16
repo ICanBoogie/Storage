@@ -11,7 +11,9 @@
 
 namespace ICanBoogie\Storage;
 
-class APCStorageTest extends \PHPUnit_Framework_TestCase
+use PHPUnit\Framework\TestCase;
+
+final class APCStorageTest extends TestCase
 {
 	use TestStorageTrait;
 
@@ -20,7 +22,7 @@ class APCStorageTest extends \PHPUnit_Framework_TestCase
 	 */
 	private $storage;
 
-	public function setUp()
+	protected function setUp()
 	{
 		if (!APCStorage::is_available())
 		{
