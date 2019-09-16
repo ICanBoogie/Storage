@@ -30,7 +30,7 @@ class FileStorage implements Storage, \ArrayAccess
 	 *
 	 * @var string
 	 */
-	protected $path;
+	private $path;
 
 	/**
 	 * @var Adapter
@@ -43,7 +43,7 @@ class FileStorage implements Storage, \ArrayAccess
 	 * @param string $path Absolute path to the storage directory.
 	 * @param Adapter $adapter
 	 */
-	public function __construct($path, Adapter $adapter = null)
+	public function __construct(string $path, Adapter $adapter = null)
 	{
 		$this->path = rtrim($path, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
 		$this->adapter = $adapter ?: new SerializeAdapter;
@@ -57,7 +57,7 @@ class FileStorage implements Storage, \ArrayAccess
 	/**
 	 * @inheritdoc
 	 */
-	public function exists($key)
+	public function exists(string $key): bool
 	{
 		return file_exists($this->format_pathname($key));
 	}
@@ -67,7 +67,7 @@ class FileStorage implements Storage, \ArrayAccess
 	 *
 	 * @param mixed $default The value returned if the key does not exists. Defaults to `null`.
 	 */
-	public function retrieve($key, $default = null)
+	public function retrieve(string $key)
 	{
 		$this->check_writable();
 
@@ -76,7 +76,7 @@ class FileStorage implements Storage, \ArrayAccess
 
 		if (file_exists($ttl_mark) && fileatime($ttl_mark) < time() || !file_exists($pathname))
 		{
-			return $default;
+			return null;
 		}
 
 		return $this->read($pathname);
@@ -87,7 +87,7 @@ class FileStorage implements Storage, \ArrayAccess
 	 *
 	 * @throws \Exception when a file operation fails.
 	 */
-	public function store($key, $value, $ttl = 0)
+	public function store(string $key, $value, int $ttl = null): void
 	{
 		$this->check_writable();
 
@@ -138,7 +138,7 @@ class FileStorage implements Storage, \ArrayAccess
 	/**
 	 * @inheritdoc
 	 */
-	public function eliminate($key)
+	public function eliminate(string $key): void
 	{
 		$pathname = $this->format_pathname($key);
 
@@ -152,55 +152,40 @@ class FileStorage implements Storage, \ArrayAccess
 
 	/**
 	 * Normalizes a key into a valid filename.
-	 *
-	 * @param string $key
-	 *
-	 * @return string
 	 */
-	protected function normalize_key($key)
+	private function normalize_key(string $key): string
 	{
 		return str_replace('/', '--', $key);
 	}
 
 	/**
 	 * Formats a key into an absolute pathname.
-	 *
-	 * @param string $key
-	 *
-	 * @return string
 	 */
-	protected function format_pathname($key)
+	private function format_pathname(string $key): string
 	{
 		return $this->path . $this->normalize_key($key);
 	}
 
 	/**
 	 * Formats a pathname with a TTL extension.
-	 *
-	 * @param string $pathname
-	 *
-	 * @return string
 	 */
-	protected function format_pathname_with_ttl($pathname)
+	private function format_pathname_with_ttl(string $pathname): string
 	{
 		return $pathname . '.ttl';
 	}
 
 	/**
-	 * @param string $pathname
-	 *
 	 * @return bool|string
 	 */
-	private function read($pathname)
+	private function read(string $pathname)
 	{
 		return $this->adapter->read($pathname);
 	}
 
 	/**
-	 * @param string $pathname
 	 * @param mixed $value
 	 */
-	private function write($pathname, $value)
+	private function write(string $pathname, $value): void
 	{
 		$this->adapter->write($pathname, $value);
 	}
@@ -208,12 +193,11 @@ class FileStorage implements Storage, \ArrayAccess
 	/**
 	 * Safely store the value.
 	 *
-	 * @param $pathname
-	 * @param $value
+	 * @param mixed $value
 	 *
 	 * @throws \Exception if an error occurs.
 	 */
-	private function safe_store($pathname, $value)
+	private function safe_store(string $pathname, $value): void
 	{
 		$dir = dirname($pathname);
 		$uniqid = uniqid(mt_rand(), true);
@@ -275,7 +259,7 @@ class FileStorage implements Storage, \ArrayAccess
 	/**
 	 * @inheritdoc
 	 */
-	public function getIterator()
+	public function getIterator(): iterable
 	{
 		if (!is_dir($this->path))
 		{
@@ -297,12 +281,8 @@ class FileStorage implements Storage, \ArrayAccess
 
 	/**
 	 * Returns an iterator for the keys matching a specified regex.
-	 *
-	 * @param string $regex
-	 *
-	 * @return Iterator
 	 */
-	public function matching($regex)
+	public function matching(string $regex): iterable
 	{
 		return new Iterator(new \RegexIterator(new \DirectoryIterator($this->path), $regex));
 	}
@@ -312,11 +292,9 @@ class FileStorage implements Storage, \ArrayAccess
 	/**
 	 * Checks whether the storage directory is writable.
 	 *
-	 * @return bool
-	 *
 	 * @throws \Exception when the storage directory is not writable.
 	 */
-	public function check_writable()
+	public function check_writable(): bool
 	{
 		if ($this->is_writable)
 		{

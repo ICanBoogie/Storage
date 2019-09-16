@@ -1,5 +1,4 @@
 sudo: false
-dist: trusty
 
 cache:
   directories:
@@ -10,9 +9,6 @@ cache:
 language: php
 
 php:
-  - 5.5
-  - 5.6
-  - 7.0
   - 7.1
   - 7.2
   - 7.3
@@ -21,11 +17,10 @@ services:
   - redis-server
 
 before_install:
-  - if [[ $TRAVIS_PHP_VERSION = "5.5" ]]; then echo yes | pecl install apcu-4.0.11; fi
-  - phpenv config-add install/travis-$TRAVIS_PHP_VERSION.ini
+  - phpenv config-add .travis/php.ini
 
 before_script:
-  - if [[ $TRAVIS_PHP_VERSION != "5.5" ]]; then phpenv config-rm xdebug.ini; fi
+  - if [[ $TRAVIS_PHP_VERSION != "7.1" ]]; then phpenv config-rm xdebug.ini; fi
 
 script:
-  - if [[ $TRAVIS_PHP_VERSION == "5.5" ]]; then make test-coveralls; else make test; fi
+  - if [[ $TRAVIS_PHP_VERSION == "7.1" ]]; then make test-coveralls; else make test; fi

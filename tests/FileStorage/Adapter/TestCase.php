@@ -3,8 +3,9 @@
 namespace ICanBoogie\Storage\FileStorage\Adapter;
 
 use ICanBoogie\Storage\FileStorage\Adapter;
+use const ICanBoogie\Storage\SANDBOX_DIR;
 
-abstract class TestCase extends \PHPUnit_Framework_TestCase
+abstract class TestCase extends \PHPUnit\Framework\TestCase
 {
 	/**
 	 * @return Adapter
@@ -27,6 +28,6 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
 	 */
 	private function createFilename()
 	{
-		return \ICanBoogie\Storage\SANDBOX_DIR . DIRECTORY_SEPARATOR . uniqid();
+		return SANDBOX_DIR . DIRECTORY_SEPARATOR . uniqid();
 	}
 }

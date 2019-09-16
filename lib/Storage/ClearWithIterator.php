@@ -16,14 +16,10 @@ namespace ICanBoogie\Storage\Storage;
  */
 trait ClearWithIterator
 {
-	abstract public function eliminate($key);
+	abstract public function eliminate(string $key): void;
+	abstract public function getIterator(): iterable;
 
-	/**
-	 * @return \Iterator
-	 */
-	abstract public function getIterator();
-
-	public function clear()
+	public function clear(): void
 	{
 		foreach ($this->getIterator() as $key)
 		{

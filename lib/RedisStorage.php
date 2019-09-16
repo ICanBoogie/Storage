@@ -31,9 +31,8 @@ class RedisStorage implements Storage, \ArrayAccess
 
 	/**
 	 * @param \Redis|mixed $redis
-	 * @param string $prefix
 	 */
-	public function __construct($redis, $prefix)
+	public function __construct($redis, string $prefix)
 	{
 		$this->redis = $redis;
 		$this->prefix = $prefix;
@@ -42,7 +41,7 @@ class RedisStorage implements Storage, \ArrayAccess
 	/**
 	 * @inheritdoc
 	 */
-	public function retrieve($key)
+	public function retrieve(string $key)
 	{
 		if (!$this->exists($key))
 		{
@@ -55,7 +54,7 @@ class RedisStorage implements Storage, \ArrayAccess
 	/**
 	 * @inheritdoc
 	 */
-	public function exists($key)
+	public function exists(string $key): bool
 	{
 		return (bool) $this->redis->exists($this->prefix . $key);
 	}
@@ -63,7 +62,7 @@ class RedisStorage implements Storage, \ArrayAccess
 	/**
 	 * @inheritdoc
 	 */
-	public function store($key, $value, $ttl = null)
+	public function store(string $key, $value, int $ttl = null): void
 	{
 		$key = $this->prefix . $key;
 
@@ -80,7 +79,7 @@ class RedisStorage implements Storage, \ArrayAccess
 	/**
 	 * @inheritdoc
 	 */
-	public function eliminate($key)
+	public function eliminate(string $key): void
 	{
 		$this->redis->del($this->prefix . $key);
 	}
@@ -88,7 +87,7 @@ class RedisStorage implements Storage, \ArrayAccess
 	/**
 	 * @inheritdoc
 	 */
-	public function getIterator()
+	public function getIterator(): iterable
 	{
 		$redis = $this->redis;
 		$prefix = $this->prefix;

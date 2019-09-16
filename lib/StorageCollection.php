@@ -13,8 +13,6 @@ namespace ICanBoogie\Storage;
 
 /**
  * A collection of {@link Storage} instances.
- *
- * @package ICanBoogie\Storage
  */
 class StorageCollection extends CacheCollection implements Storage, \ArrayAccess
 {
@@ -23,7 +21,7 @@ class StorageCollection extends CacheCollection implements Storage, \ArrayAccess
 	/**
 	 * @inheritdoc
 	 */
-	public function retrieve($key)
+	public function retrieve(string $key)
 	{
 		/* @var $update Storage[] */
 
@@ -58,7 +56,7 @@ class StorageCollection extends CacheCollection implements Storage, \ArrayAccess
 	/**
 	 * @inheritdoc
 	 */
-	public function store($key, $value, $ttl = null)
+	public function store(string $key, $value, int $ttl = null): void
 	{
 		$this->for_each(__FUNCTION__, func_get_args());
 	}
@@ -66,7 +64,7 @@ class StorageCollection extends CacheCollection implements Storage, \ArrayAccess
 	/**
 	 * @inheritdoc
 	 */
-	public function eliminate($key)
+	public function eliminate(string $key): void
 	{
 		$this->for_each(__FUNCTION__, func_get_args());
 	}
@@ -74,7 +72,7 @@ class StorageCollection extends CacheCollection implements Storage, \ArrayAccess
 	/**
 	 * @inheritdoc
 	 */
-	public function clear()
+	public function clear(): void
 	{
 		$this->for_each(__FUNCTION__, func_get_args());
 	}
@@ -84,7 +82,7 @@ class StorageCollection extends CacheCollection implements Storage, \ArrayAccess
 	 *
 	 * @return Storage|null
 	 */
-	public function find_by_type($type)
+	public function find_by_type(string $type): ?Cache
 	{
 		return parent::find_by_type($type);
 	}
@@ -92,14 +90,13 @@ class StorageCollection extends CacheCollection implements Storage, \ArrayAccess
 	/**
 	 * Apply a same method to each storage instance in the collection.
 	 *
-	 * @param string $method
-	 * @param array $arguments
+	 * @param mixed[] $arguments
 	 */
-	private function for_each($method, array $arguments)
+	private function for_each(string $method, array $arguments): void
 	{
 		foreach ($this->collection as $storage)
 		{
-			call_user_func_array([ $storage, $method ], $arguments);
+			$storage->$method(...$arguments);
 		}
 	}
 }

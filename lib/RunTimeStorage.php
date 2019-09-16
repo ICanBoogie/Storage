@@ -13,8 +13,6 @@ namespace ICanBoogie\Storage;
 
 /**
  * A storage that uses an array to store values.
- *
- * @package ICanBoogie\Storage
  */
 class RunTimeStorage implements Storage, \ArrayAccess
 {
@@ -25,7 +23,7 @@ class RunTimeStorage implements Storage, \ArrayAccess
 	/**
 	 * @inheritdoc
 	 */
-	public function exists($key)
+	public function exists(string $key): bool
 	{
 		return array_key_exists($key, $this->values);
 	}
@@ -33,7 +31,7 @@ class RunTimeStorage implements Storage, \ArrayAccess
 	/**
 	 * @inheritdoc
 	 */
-	public function retrieve($key)
+	public function retrieve(string $key)
 	{
 		return $this->exists($key) ? $this->values[$key] : null;
 	}
@@ -41,7 +39,7 @@ class RunTimeStorage implements Storage, \ArrayAccess
 	/**
 	 * @inheritdoc
 	 */
-	public function store($key, $value, $ttl = null)
+	public function store(string $key, $value, int $ttl = null): void
 	{
 		$this->values[$key] = $value;
 	}
@@ -49,7 +47,7 @@ class RunTimeStorage implements Storage, \ArrayAccess
 	/**
 	 * @inheritdoc
 	 */
-	public function eliminate($key)
+	public function eliminate(string $key): void
 	{
 		unset($this->values[$key]);
 	}
@@ -57,7 +55,7 @@ class RunTimeStorage implements Storage, \ArrayAccess
 	/**
 	 * @inheritdoc
 	 */
-	public function clear()
+	public function clear(): void
 	{
 		$this->values = [];
 	}
@@ -65,7 +63,7 @@ class RunTimeStorage implements Storage, \ArrayAccess
 	/**
 	 * @inheritdoc
 	 */
-	public function getIterator()
+	public function getIterator(): iterable
 	{
 		return new \ArrayIterator(array_keys($this->values));
 	}

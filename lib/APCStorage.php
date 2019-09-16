@@ -21,11 +21,9 @@ class APCStorage implements Storage, \ArrayAccess
 	/**
 	 * Whether the APC feature is available.
 	 *
-	 * @return bool
-	 *
 	 * @codeCoverageIgnore
 	 */
-	static public function is_available()
+	static public function is_available(): bool
 	{
 		return (extension_loaded('apc') || extension_loaded('apcu')) && ini_get('apc.enabled');
 	}
@@ -35,10 +33,7 @@ class APCStorage implements Storage, \ArrayAccess
 	 */
 	private $prefix;
 
-	/**
-	 * @param string|null $prefix
-	 */
-	public function __construct($prefix = null)
+	public function __construct(string $prefix = null)
 	{
 		$this->prefix = $prefix ?: substr(sha1($_SERVER['DOCUMENT_ROOT']), 0, 8) . ':';
 	}
@@ -46,7 +41,7 @@ class APCStorage implements Storage, \ArrayAccess
 	/**
 	 * @inheritdoc
 	 */
-	public function exists($key)
+	public function exists(string $key): bool
 	{
 		return apcu_exists($this->prefix . $key);
 	}
@@ -54,7 +49,7 @@ class APCStorage implements Storage, \ArrayAccess
 	/**
 	 * @inheritdoc
 	 */
-	public function retrieve($key)
+	public function retrieve(string $key)
 	{
 		$rc = apcu_fetch($this->prefix . $key, $success);
 
@@ -64,7 +59,7 @@ class APCStorage implements Storage, \ArrayAccess
 	/**
 	 * @inheritdoc
 	 */
-	public function store($key, $data, $ttl = 0)
+	public function store(string $key, $data, int $ttl = null): void
 	{
 		apcu_store($this->prefix . $key, $data, $ttl);
 	}
@@ -72,7 +67,7 @@ class APCStorage implements Storage, \ArrayAccess
 	/**
 	 * @inheritdoc
 	 */
-	public function eliminate($key)
+	public function eliminate(string $key): void
 	{
 		apcu_delete($this->prefix . $key);
 	}
@@ -80,7 +75,7 @@ class APCStorage implements Storage, \ArrayAccess
 	/**
 	 * @inheritdoc
 	 */
-	public function clear()
+	public function clear(): void
 	{
 		apcu_delete($this->create_internal_iterator());
 	}
@@ -88,7 +83,7 @@ class APCStorage implements Storage, \ArrayAccess
 	/**
 	 * @inheritdoc
 	 */
-	public function getIterator()
+	public function getIterator(): iterable
 	{
 		$prefix_length = strlen($this->prefix);
 
@@ -100,10 +95,8 @@ class APCStorage implements Storage, \ArrayAccess
 
 	/**
 	 * Creates internal iterator.
-	 *
-	 * @return \APCUIterator
 	 */
-	private function create_internal_iterator()
+	private function create_internal_iterator(): \APCUIterator
 	{
 		return new \APCUIterator('/^' . preg_quote($this->prefix) . '/', APC_ITER_NONE);
 	}
