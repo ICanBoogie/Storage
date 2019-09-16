@@ -5,6 +5,7 @@ PACKAGE_VERSION = 4.0.0
 PHPUNIT_VERSION = phpunit-7.5.phar
 PHPUNIT_FILENAME = build/$(PHPUNIT_VERSION)
 PHPUNIT = php $(PHPUNIT_FILENAME)
+PHPUNIT_COVERAGE=phpdbg -qrr $(PHPUNIT_FILENAME) -d memory_limit=-1
 
 # do not edit the following lines
 
@@ -22,7 +23,7 @@ autoload: vendor
 
 $(PHPUNIT_FILENAME):
 	mkdir -p build
-	wget https://phar.phpunit.de/$(PHPUNIT_VERSION) -O $(PHPUNIT_FILENAME)
+	curl https://phar.phpunit.de/$(PHPUNIT_VERSION) -Ls --output $(PHPUNIT_FILENAME)
 
 test-dependencies: $(PHPUNIT_FILENAME) vendor
 
@@ -32,7 +33,7 @@ test: test-dependencies
 
 test-coverage: test-dependencies
 	@mkdir -p build/coverage
-	@$(PHPUNIT) --coverage-html build/coverage
+	@$(PHPUNIT_COVERAGE) --coverage-html build/coverage
 
 test-coveralls: test-dependencies
 	@mkdir -p build/logs
