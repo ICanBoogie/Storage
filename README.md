@@ -6,14 +6,14 @@
 [![Code Coverage](https://img.shields.io/coveralls/ICanBoogie/Storage.svg)](https://coveralls.io/r/ICanBoogie/Storage)
 [![Packagist](https://img.shields.io/packagist/dt/icanboogie/storage.svg)](https://packagist.org/packages/icanboogie/storage)
 
-The **icanboogie/storage** package defines an API to store and retrieve values, while offering
-different storage backends.
+**icanboogie/storage** defines an API to store and retrieve values, while offering different storage
+backends.
 
 Values can be stored using the runtime memory, [Redis][], [APC][], the file system… Storage
 collections retrieve and store values using multiple different storage instances, that usually range
 from the less expensive (and the more volatile) to the more expensive (and the more durable).
 
-This package includes the following storage adapters:
+This package includes the following storage backends:
 
 - [RunTimeStorage][]: Uses a PHP array.
 - [RedisStorage][]: Uses a [Redis][] instance.
@@ -199,17 +199,6 @@ The recommended way to install this package is through [Composer](http://getcomp
 
 
 
-### Cloning the repository
-
-The package is [available on GitHub](https://github.com/ICanBoogie/Storage), its repository can be
-cloned with the following command line:
-
-    $ git clone https://github.com/ICanBoogie/Storage.git
-
-
-
-
-
 ## Documentation
 
 The package is documented as part of the [ICanBoogie][] framework
@@ -221,15 +210,14 @@ The directory can later be cleaned with the `make clean` command.
 
 
 
-## Testing
+## Local development & Testing
 
-The test suite is ran with the `make test` command. [PHPUnit](https://phpunit.de/) and
-[Composer](http://getcomposer.org/) need to be globally available to run the suite.
-The command installs dependencies as required. The `make test-coverage` command runs test suite and
-also creates an HTML coverage report in "build/coverage". The directory can later be cleaned with
-the `make clean` command.
+For local development, use the provided test container. You'll need [Docker][] for that. Run `make
+test-container` to open a terminal session inside the container, then run `make test` to run the
+test suite. Alternatively, run `make test-coverage` to run the test suite and produce coverage
+report in `build/coverag`.
 
-The package is continuously tested by [Travis CI](http://about.travis-ci.org/).
+[Travis CI](http://about.travis-ci.org/) continuously test the package.
 
 [![Build Status](https://img.shields.io/travis/ICanBoogie/Storage.svg)](https://travis-ci.org/ICanBoogie/Storage)
 [![Code Coverage](https://img.shields.io/coveralls/ICanBoogie/Storage.svg)](https://coveralls.io/r/ICanBoogie/Storage)
@@ -265,3 +253,4 @@ The package is continuously tested by [Travis CI](http://about.travis-ci.org/).
 [Storage]:           https://icanboogie.org/api/storage/master/class-ICanBoogie.Storage.Storage.html
 [ArrayAccess]:       https://icanboogie.org/api/storage/master/class-ICanBoogie.Storage.Storage.ArrayAccess.html
 [StorageCollection]: https://icanboogie.org/api/storage/master/class-ICanBoogie.Storage.StorageCollection.html
+[Docker]:            https://www.docker.com/

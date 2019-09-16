@@ -1,0 +1,16 @@
+---
+version: "3.0"
+services:
+  app:
+    build: .
+    depends_on:
+    - redis
+    environment:
+      REDIS_HOST: redis
+    volumes:
+    - .:/app:delegated
+    - ~/.composer:/root/.composer
+    working_dir: /app
+
+  redis:
+    image: redis:5.0-alpine
