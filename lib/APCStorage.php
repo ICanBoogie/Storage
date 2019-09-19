@@ -61,7 +61,7 @@ class APCStorage implements Storage, \ArrayAccess
 	 */
 	public function store(string $key, $data, int $ttl = null): void
 	{
-		apcu_store($this->prefix . $key, $data, $ttl);
+		apcu_store($this->prefix . $key, $data, $ttl ?: 0);
 	}
 
 	/**

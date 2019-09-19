@@ -15,6 +15,8 @@ use PHPUnit\Framework\TestCase;
 
 class StorageCollectionTest extends TestCase
 {
+	use TestStorageTrait;
+
 	/**
 	 * @var StorageCollection
 	 */
@@ -33,14 +35,14 @@ class StorageCollectionTest extends TestCase
 	/**
 	 * @var StorageCollection
 	 */
-	private $collection;
+	private $storage;
 
 	public function setUp()
 	{
 		$this->s1 = $s1 = new RunTimeStorage;
 		$this->s2 = $s2 = new RunTimeStorage;
 		$this->s3 = $s3 = new RunTimeStorage;
-		$this->collection = new StorageCollection([ $s1, $s2, $s3 ]);
+		$this->storage = new StorageCollection([ $s1, $s2, $s3 ]);
 	}
 
 	public function test_store()
@@ -48,11 +50,11 @@ class StorageCollectionTest extends TestCase
 		$key = uniqid();
 		$value = uniqid();
 
-		$this->collection->store($key, $value);
+		$this->storage->store($key, $value);
 
 		/* @var $storage Storage */
 
-		foreach([ $this->collection, $this->s1, $this->s2, $this->s3 ] as $storage)
+		foreach([ $this->storage, $this->s1, $this->s2, $this->s3 ] as $storage)
 		{
 			$this->assertTrue($storage->exists($key));
 			$this->assertSame($value, $storage->retrieve($key));
@@ -64,7 +66,7 @@ class StorageCollectionTest extends TestCase
 		$s1 = $this->s1;
 		$s2 = $this->s2;
 		$s3 = $this->s3;
-		$collection = $this->collection;
+		$collection = $this->storage;
 		$key = uniqid();
 		$value = uniqid();
 
@@ -82,7 +84,7 @@ class StorageCollectionTest extends TestCase
 		$s1 = $this->s1;
 		$s2 = $this->s2;
 		$s3 = $this->s3;
-		$collection = $this->collection;
+		$collection = $this->storage;
 		$k1 = uniqid();
 		$v1 = uniqid();
 		$k2 = uniqid();
@@ -113,7 +115,7 @@ class StorageCollectionTest extends TestCase
 		$s1 = $this->s1;
 		$s2 = $this->s2;
 		$s3 = $this->s3;
-		$collection = $this->collection;
+		$collection = $this->storage;
 		$k1 = uniqid();
 		$v1 = uniqid();
 		$k2 = uniqid();
@@ -135,7 +137,7 @@ class StorageCollectionTest extends TestCase
 
 	public function test_array_access()
 	{
-		$collection = $this->collection;
+		$collection = $this->storage;
 		$k = uniqid();
 		$v = uniqid();
 
@@ -150,16 +152,16 @@ class StorageCollectionTest extends TestCase
 
 	public function test_find_by_type()
 	{
-		$this->assertSame($this->s1, $this->collection->find_by_type(RunTimeStorage::class));
+		$this->assertSame($this->s1, $this->storage->find_by_type(RunTimeStorage::class));
 	}
 
 	public function test_find_by_type_undefined()
 	{
-		$this->assertNull($this->collection->find_by_type(RedisStorage::class));
+		$this->assertNull($this->storage->find_by_type(RedisStorage::class));
 	}
 
 	public function test_iterator()
 	{
-		$this->assertInstanceOf(\Iterator::class, $this->collection->getIterator());
+		$this->assertInstanceOf(\Iterator::class, $this->storage->getIterator());
 	}
 }
