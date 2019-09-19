@@ -49,6 +49,17 @@ trait TestStorageTrait
 		$this->assertNull($s->retrieve($k2));
 	}
 
+	public function test_store_with_ttl()
+	{
+		$storage = $this->storage;
+		$storage->store($key = uniqid(), $value = uniqid(), $ttl = 1);
+		$this->assertTrue($storage->exists($key));
+		$this->assertSame($value, $storage->retrieve($key));
+		sleep($ttl + 1);
+		$this->assertFalse($storage->exists($key));
+		$this->assertNull($storage->retrieve($key));
+	}
+
 	public function test_iterator()
 	{
 		$s = $this->storage;

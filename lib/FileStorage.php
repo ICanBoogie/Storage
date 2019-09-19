@@ -59,27 +59,27 @@ class FileStorage implements Storage, \ArrayAccess
 	 */
 	public function exists(string $key): bool
 	{
-		return file_exists($this->format_pathname($key));
-	}
-
-	/**
-	 * @inheritdoc
-	 *
-	 * @param mixed $default The value returned if the key does not exists. Defaults to `null`.
-	 */
-	public function retrieve(string $key)
-	{
-		$this->check_writable();
-
 		$pathname = $this->format_pathname($key);
 		$ttl_mark = $this->format_pathname_with_ttl($pathname);
 
 		if (file_exists($ttl_mark) && fileatime($ttl_mark) < time() || !file_exists($pathname))
 		{
+			return false;
+		}
+
+		return file_exists($pathname);
+	}
+
+	/**
+	 * @inheritdoc
+	 */
+	public function retrieve(string $key)
+	{
+		if (!$this->exists($key)) {
 			return null;
 		}
 
-		return $this->read($pathname);
+		return $this->read($this->format_pathname($key));
 	}
 
 	/**

@@ -50,13 +50,34 @@ $storage->exists('icanboogie');     // false
 $storage->retrieve('icanboogie');   // null
 ```
 
+### Time To Live
+
+The Time To Live (TTL) of an item is the amount of seconds between when that item is stored and it
+is considered stale.
+
+> **Warning:** [`apc.use_request_time`][] needs to be set to `false` if you want to use that feature
+with APCU.
+
+```php
+<?php
+
+use ICanBoogie\Storage\RunTimeStorage;
+
+$storage = new RunTimeStorage;
+$storage->store('icanboogie', "Yes Sir, I Can Boogie", $ttl = 3);
+$storage->retrieve('icanboogie');   // "Yes Sir, I Can Boogie"
+sleep(4);
+$storage->exists('icanboogie');     // false
+$storage->retrieve('icanboogie');   // null
+```
 
 
 
 
-### Use storages like arrays
 
-Storage implement the `ArrayAccess` interface and may be accessed as arrays.
+### Use storage like arrays
+
+Storage implements the `ArrayAccess` interface and may be accessed as arrays.
 
 ```php
 <?php
@@ -79,7 +100,7 @@ $storage['icanboogie'];            // null
 
 ### Iterate storage keys
 
-Storage implement the `IteratorAggregate` interface and may be used in a `foreach` to
+Storage implements the `IteratorAggregate` interface and may be used in a `foreach` to
 iterate their keys:
 
 ```php
@@ -254,3 +275,4 @@ report in `build/coverag`.
 [ArrayAccess]:       https://icanboogie.org/api/storage/master/class-ICanBoogie.Storage.Storage.ArrayAccess.html
 [StorageCollection]: https://icanboogie.org/api/storage/master/class-ICanBoogie.Storage.StorageCollection.html
 [Docker]:            https://www.docker.com/
+[`apc.use_request_time`]: https://www.php.net/manual/en/apcu.configuration.php#ini.apcu.use-request-time
