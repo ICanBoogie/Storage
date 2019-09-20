@@ -164,4 +164,39 @@ class StorageCollectionTest extends TestCase
 	{
 		$this->assertInstanceOf(\Iterator::class, $this->storage->getIterator());
 	}
+
+	public function test_default_ttl()
+	{
+		$ttl = 100;
+		$k = uniqid();
+		$v = uniqid();
+
+		$s1 = $this->getMockBuilder(RunTimeStorage::class)->getMock();
+		$s1->expects($this->once())
+			->method('store')
+			->with($k, $v, $ttl);
+
+		$s2 = new RunTimeStorage;
+		$s2->store($k, $v);
+
+		$storage = new StorageCollection([ $s1, $s2 ], $ttl);
+		$storage->retrieve($k);
+	}
+
+	public function test_no_default_ttl()
+	{
+		$k = uniqid();
+		$v = uniqid();
+
+		$s1 = $this->getMockBuilder(RunTimeStorage::class)->getMock();
+		$s1->expects($this->once())
+			->method('store')
+			->with($k, $v, null);
+
+		$s2 = new RunTimeStorage;
+		$s2->store($k, $v);
+
+		$storage = new StorageCollection([ $s1, $s2 ]);
+		$storage->retrieve($k);
+	}
 }

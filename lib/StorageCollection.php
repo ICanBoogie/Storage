@@ -19,6 +19,18 @@ class StorageCollection extends CacheCollection implements Storage, \ArrayAccess
 	use Storage\ArrayAccess;
 
 	/**
+	 * @var int|null
+	 */
+	private $default_ttl;
+
+	public function __construct(array $collection, ?int $default_ttl = null)
+	{
+		parent::__construct($collection);
+
+		$this->default_ttl = $default_ttl;
+	}
+
+	/**
 	 * @inheritdoc
 	 */
 	public function retrieve(string $key)
@@ -47,7 +59,7 @@ class StorageCollection extends CacheCollection implements Storage, \ArrayAccess
 
 		foreach ($update as $storage)
 		{
-			$storage->store($key, $value);
+			$storage->store($key, $value, $this->default_ttl);
 		}
 
 		return $value;
