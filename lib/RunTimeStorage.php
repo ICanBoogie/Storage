@@ -29,6 +29,19 @@ class RunTimeStorage implements Storage, \ArrayAccess
 	private $until = [];
 
 	/**
+	 * @var int
+	 */
+	private $default_ttl;
+
+	/**
+	 * @param int|null $default_ttl TTL to use when no value passed to store()
+	 */
+	public function __construct(?int $default_ttl = null)
+	{
+		$this->default_ttl = $default_ttl;
+	}
+
+	/**
 	 * @inheritdoc
 	 */
 	public function exists(string $key): bool
@@ -54,7 +67,7 @@ class RunTimeStorage implements Storage, \ArrayAccess
 	public function store(string $key, $value, int $ttl = null): void
 	{
 		$this->values[$key] = $value;
-		$this->until[$key] = time() + $ttl;
+		$this->until[$key] = time() + $ttl ?? $this->default_ttl;
 	}
 
 	/**

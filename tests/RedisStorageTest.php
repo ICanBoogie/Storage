@@ -45,4 +45,43 @@ class RedisStorageTest extends TestCase
 
 		$this->storage = new RedisStorage($redis, 'prefix_' . substr(sha1(uniqid()), 0, 8) . ':');
 	}
+
+	public function test_default_ttl()
+	{
+		$test_ttl   = 1000;
+		$redis = $this->createMock(\Redis::class);
+
+		$redis->expects($this->once())
+			->method('set')
+			->with($this->anything(), $this->anything(), $test_ttl);
+
+		$storage_with_ttl = new RedisStorage($redis, 'prefix_', $test_ttl);
+		$storage_with_ttl->store('key', 'value');
+	}
+
+	public function test_default_ttl_override()
+	{
+		$test_ttl            = 1000;
+		$test_ttl_override   = 2000;
+		$redis = $this->createMock(\Redis::class);
+
+		$redis->expects($this->once())
+			->method('set')
+			->with($this->anything(), $this->anything(), $test_ttl_override);
+
+		$storage_with_ttl = new RedisStorage($redis, 'prefix_', $test_ttl);
+		$storage_with_ttl->store('key', 'value', $test_ttl_override);
+	}
+
+	public function test_no_default_ttl()
+	{
+		$redis = $this->createMock(\Redis::class);
+
+		$redis->expects($this->once())
+			->method('set')
+			->with($this->anything(), $this->anything(), null);
+
+		$storage_with_ttl = new RedisStorage($redis, 'prefix_');
+		$storage_with_ttl->store('key', 'value');
+	}
 }

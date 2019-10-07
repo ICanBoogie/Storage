@@ -33,9 +33,15 @@ class APCStorage implements Storage, \ArrayAccess
 	 */
 	private $prefix;
 
-	public function __construct(string $prefix = null)
+	/**
+	 * @var int
+	 */
+	private $default_ttl;
+
+	public function __construct(string $prefix = null, ?int $default_ttl = null)
 	{
 		$this->prefix = $prefix ?: substr(sha1($_SERVER['DOCUMENT_ROOT']), 0, 8) . ':';
+		$this->default_ttl = $default_ttl;
 	}
 
 	/**
@@ -61,7 +67,7 @@ class APCStorage implements Storage, \ArrayAccess
 	 */
 	public function store(string $key, $data, int $ttl = null): void
 	{
-		apcu_store($this->prefix . $key, $data, $ttl ?: 0);
+		apcu_store($this->prefix . $key, $data, $ttl ?? $this->default_ttl ?? 0);
 	}
 
 	/**
