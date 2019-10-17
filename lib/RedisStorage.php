@@ -30,12 +30,20 @@ class RedisStorage implements Storage, \ArrayAccess
 	private $prefix;
 
 	/**
-	 * @param \Redis|mixed $redis
+	 * @var int
 	 */
-	public function __construct($redis, string $prefix)
+	private $default_ttl;
+
+	/**
+	 * @param \Redis|mixed $redis
+	 * @param string $prefix
+	 * @param int|null $default_ttl TTL to use when no value passed to store()
+	 */
+	public function __construct($redis, string $prefix, ?int $default_ttl = null)
 	{
 		$this->redis = $redis;
 		$this->prefix = $prefix;
+		$this->default_ttl = $default_ttl;
 	}
 
 	/**
@@ -65,6 +73,7 @@ class RedisStorage implements Storage, \ArrayAccess
 	public function store(string $key, $value, int $ttl = null): void
 	{
 		$key = $this->prefix . $key;
+		$ttl = $ttl ?? $this->default_ttl;
 
 		if ($ttl)
 		{

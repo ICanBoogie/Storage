@@ -38,15 +38,22 @@ class FileStorage implements Storage, \ArrayAccess
 	private $adapter;
 
 	/**
+	 * @var int
+	 */
+	private $default_ttl;
+
+	/**
 	 * Constructor.
 	 *
 	 * @param string $path Absolute path to the storage directory.
 	 * @param Adapter $adapter
+	 * @param int|null $default_ttl TTL to use when no value passed to store()
 	 */
-	public function __construct(string $path, Adapter $adapter = null)
+	public function __construct(string $path, Adapter $adapter = null, ?int $default_ttl = null)
 	{
 		$this->path = rtrim($path, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
 		$this->adapter = $adapter ?: new SerializeAdapter;
+		$this->default_ttl = $default_ttl;
 
 		if (self::$release_after === null)
 		{
@@ -96,7 +103,7 @@ class FileStorage implements Storage, \ArrayAccess
 
 		if ($ttl)
 		{
-			$future = time() + $ttl;
+			$future = time() + $ttl ?? $this->default_ttl;
 
 			touch($ttl_mark, $future, $future);
 		}
