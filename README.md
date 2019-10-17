@@ -167,11 +167,11 @@ $storage = new StorageCollection([
     new RedisStorage($redis_client, 'my-prefix'),
     new FileStorage('/path/to/directory')
 
-]);
+], $default_ttl);
 ```
 
 All the storage instances in the collection are updated by the `store()`, `eliminate()`,
-and `clear()` methods. Storage instances are also updated when values are retrieved from
+and `clear()` methods. Storage instances are also updated (with `$default_ttl`) when values are retrieved from
 _more expensive_ storages, so that the next time the value is requested it is retrieved from
 a less expensive storage.
 
