@@ -43,12 +43,14 @@ class RedisStorage implements Storage, \ArrayAccess
 	 */
 	public function retrieve(string $key)
 	{
-		if (!$this->exists($key))
+		$value = $this->redis->get($this->prefix . $key);
+
+		if ($value === false)
 		{
 			return null;
 		}
 
-		return unserialize($this->redis->get($this->prefix . $key));
+		return unserialize($value);
 	}
 
 	/**
