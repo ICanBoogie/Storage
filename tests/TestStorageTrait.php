@@ -60,31 +60,6 @@ trait TestStorageTrait
 		$this->assertNull($storage->retrieve($key));
 	}
 
-	public function data_store_type()
-	{
-		return [
-			'null' => [null],
-			'array' => [[]],
-			'false' => [false],
-			'int' => [1],
-			'zero' => [0],
-			'float' => [3.14],
-			'string' => ['test'],
-			'empty string' => [''],
-		];
-	}
-
-	/**
-	 * @dataProvider data_store_type
-	 */
-	public function test_store_type($data)
-	{
-		$storage = $this->storage;
-
-		$storage->store('test', $data);
-		$this->assertSame($data, $storage->retrieve('test'));
-	}
-
 	public function test_iterator()
 	{
 		$s = $this->storage;
