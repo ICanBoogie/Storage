@@ -112,7 +112,7 @@ class FileStorage implements Storage, \ArrayAccess
 			return;
 		}
 
-		if ($value === false || $value === null)
+		if ($value === null)
 		{
 			$this->eliminate($key);
 
