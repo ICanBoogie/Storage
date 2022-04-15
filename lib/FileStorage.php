@@ -11,46 +11,42 @@
 
 namespace ICanBoogie\Storage;
 
+use ArrayAccess;
+use DirectoryIterator;
+use Exception;
 use ICanBoogie\Storage\FileStorage\Adapter;
 use ICanBoogie\Storage\FileStorage\Adapter\SerializeAdapter;
 use ICanBoogie\Storage\FileStorage\Iterator;
+use RegexIterator;
+use Traversable;
 
 /**
  * A storage using the file system.
  */
-class FileStorage implements Storage, \ArrayAccess
+final class FileStorage implements Storage, ArrayAccess
 {
 	use Storage\ArrayAccess;
 	use Storage\ClearWithIterator;
 
-	static private $release_after;
+	static private bool $release_after = false;
 
 	/**
 	 * Absolute path to the storage directory.
-	 *
-	 * @var string
 	 */
-	private $path;
+	private string $path;
+
+	private Adapter $adapter;
 
 	/**
-	 * @var Adapter
-	 */
-	private $adapter;
-
-	/**
-	 * Constructor.
-	 *
 	 * @param string $path Absolute path to the storage directory.
-	 * @param Adapter $adapter
 	 */
 	public function __construct(string $path, Adapter $adapter = null)
 	{
 		$this->path = rtrim($path, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
-		$this->adapter = $adapter ?: new SerializeAdapter;
+		$this->adapter = $adapter ?? new SerializeAdapter;
 
-		if (self::$release_after === null)
-		{
-			self::$release_after = strpos(PHP_OS, 'WIN') === 0 ? false : true;
+		if (self::$release_after === null) {
+			self::$release_after = !(str_starts_with(PHP_OS, 'WIN'));
 		}
 	}
 
@@ -62,8 +58,7 @@ class FileStorage implements Storage, \ArrayAccess
 		$pathname = $this->format_pathname($key);
 		$ttl_mark = $this->format_pathname_with_ttl($pathname);
 
-		if (file_exists($ttl_mark) && fileatime($ttl_mark) < time() || !file_exists($pathname))
-		{
+		if (file_exists($ttl_mark) && fileatime($ttl_mark) < time() || !file_exists($pathname)) {
 			return false;
 		}
 
@@ -73,7 +68,7 @@ class FileStorage implements Storage, \ArrayAccess
 	/**
 	 * @inheritdoc
 	 */
-	public function retrieve(string $key)
+	public function retrieve(string $key): mixed
 	{
 		if (!$this->exists($key)) {
 			return null;
@@ -85,52 +80,41 @@ class FileStorage implements Storage, \ArrayAccess
 	/**
 	 * @inheritdoc
 	 *
-	 * @throws \Exception when a file operation fails.
+	 * @throws Exception when a file operation fails.
 	 */
-	public function store(string $key, $value, int $ttl = null): void
+	public function store(string $key, mixed $value, int $ttl = null): void
 	{
 		$this->check_writable();
 
 		$pathname = $this->format_pathname($key);
 		$ttl_mark = $this->format_pathname_with_ttl($pathname);
 
-		if ($ttl)
-		{
+		if ($ttl) {
 			$future = time() + $ttl;
 
 			touch($ttl_mark, $future, $future);
-		}
-		elseif (file_exists($ttl_mark))
-		{
+		} elseif (file_exists($ttl_mark)) {
 			unlink($ttl_mark);
 		}
 
-		if ($value === true)
-		{
+		if ($value === true) {
 			touch($pathname);
 
 			return;
 		}
 
-		if ($value === null)
-		{
+		if ($value === null) {
 			$this->eliminate($key);
 
 			return;
 		}
 
-		set_error_handler(function() {});
+		set_error_handler(function () {
+		});
 
-		try
-		{
+		try {
 			$this->safe_store($pathname, $value);
-		}
-		catch (\Exception $e)
-		{
-			throw $e;
-		}
-		finally
-		{
+		} finally {
 			restore_error_handler();
 		}
 	}
@@ -142,8 +126,7 @@ class FileStorage implements Storage, \ArrayAccess
 	{
 		$pathname = $this->format_pathname($key);
 
-		if (!file_exists($pathname))
-		{
+		if (!file_exists($pathname)) {
 			return;
 		}
 
@@ -174,18 +157,12 @@ class FileStorage implements Storage, \ArrayAccess
 		return $pathname . '.ttl';
 	}
 
-	/**
-	 * @return bool|string
-	 */
-	private function read(string $pathname)
+	private function read(string $pathname): mixed
 	{
 		return $this->adapter->read($pathname);
 	}
 
-	/**
-	 * @param mixed $value
-	 */
-	private function write(string $pathname, $value): void
+	private function write(string $pathname, mixed $value): void
 	{
 		$this->adapter->write($pathname, $value);
 	}
@@ -193,11 +170,9 @@ class FileStorage implements Storage, \ArrayAccess
 	/**
 	 * Safely store the value.
 	 *
-	 * @param mixed $value
-	 *
-	 * @throws \Exception if an error occurs.
+	 * @throws Exception if an error occurs.
 	 */
-	private function safe_store(string $pathname, $value): void
+	private function safe_store(string $pathname, mixed $value): void
 	{
 		$dir = dirname($pathname);
 		$uniqid = uniqid(mt_rand(), true);
@@ -211,14 +186,12 @@ class FileStorage implements Storage, \ArrayAccess
 
 		$fh = fopen($pathname, 'a+');
 
-		if (!$fh)
-		{
-			throw new \Exception("Unable to open $pathname.");
+		if (!$fh) {
+			throw new Exception("Unable to open $pathname.");
 		}
 
-		if (self::$release_after && !flock($fh, LOCK_EX))
-		{
-			throw new \Exception("Unable to get to exclusive lock on $pathname.");
+		if (self::$release_after && !flock($fh, LOCK_EX)) {
+			throw new Exception("Unable to get to exclusive lock on $pathname.");
 		}
 
 		$this->write($tmp_pathname, $value);
@@ -226,31 +199,26 @@ class FileStorage implements Storage, \ArrayAccess
 		#
 		# Windows, this is for you
 		#
-		if (!self::$release_after)
-		{
+		if (!self::$release_after) {
 			fclose($fh);
 		}
 
-		if (!rename($pathname, $garbage_pathname))
-		{
-			throw new \Exception("Unable to rename $pathname as $garbage_pathname.");
+		if (!rename($pathname, $garbage_pathname)) {
+			throw new Exception("Unable to rename $pathname as $garbage_pathname.");
 		}
 
-		if (!rename($tmp_pathname, $pathname))
-		{
-			throw new \Exception("Unable to rename $tmp_pathname as $pathname.");
+		if (!rename($tmp_pathname, $pathname)) {
+			throw new Exception("Unable to rename $tmp_pathname as $pathname.");
 		}
 
-		if (!unlink($garbage_pathname))
-		{
-			throw new \Exception("Unable to delete $garbage_pathname.");
+		if (!unlink($garbage_pathname)) {
+			throw new Exception("Unable to delete $garbage_pathname.");
 		}
 
 		#
 		# Unix, this is for you
 		#
-		if (self::$release_after)
-		{
+		if (self::$release_after) {
 			flock($fh, LOCK_UN);
 			fclose($fh);
 		}
@@ -259,19 +227,16 @@ class FileStorage implements Storage, \ArrayAccess
 	/**
 	 * @inheritdoc
 	 */
-	public function getIterator(): iterable
+	public function getIterator(): Traversable
 	{
-		if (!is_dir($this->path))
-		{
+		if (!is_dir($this->path)) {
 			return;
 		}
 
-		$iterator = new \DirectoryIterator($this->path);
+		$iterator = new DirectoryIterator($this->path);
 
-		foreach ($iterator as $file)
-		{
-			if ($file->isDot() || $file->isDir())
-			{
+		foreach ($iterator as $file) {
+			if ($file->isDot() || $file->isDir()) {
 				continue;
 			}
 
@@ -284,35 +249,33 @@ class FileStorage implements Storage, \ArrayAccess
 	 */
 	public function matching(string $regex): iterable
 	{
-		return new Iterator(new \RegexIterator(new \DirectoryIterator($this->path), $regex));
+		return new Iterator(new RegexIterator(new DirectoryIterator($this->path), $regex));
 	}
 
-	private $is_writable;
+	private ?bool $is_writable = null;
 
 	/**
 	 * Checks whether the storage directory is writable.
 	 *
-	 * @throws \Exception when the storage directory is not writable.
+	 * @throws Exception when the storage directory is not writable.
 	 */
 	public function check_writable(): bool
 	{
-		if ($this->is_writable)
-		{
+		if ($this->is_writable) {
 			return true;
 		}
 
 		$path = $this->path;
 
-		if (!file_exists($path))
-		{
-			set_error_handler(function() {});
+		if (!file_exists($path)) {
+			set_error_handler(function () {
+			});
 			mkdir($path, 0705, true);
 			restore_error_handler();
 		}
 
-		if (!is_writable($path))
-		{
-			throw new \Exception("The directory $path is not writable.");
+		if (!is_writable($path)) {
+			throw new Exception("The directory $path is not writable.");
 		}
 
 		return $this->is_writable = true;

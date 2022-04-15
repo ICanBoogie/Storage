@@ -9,9 +9,7 @@ cache:
 language: php
 
 php:
-  - 7.1
-  - 7.2
-  - 7.3
+  - 8.1
 
 services:
   - redis-server
@@ -20,7 +18,7 @@ before_install:
   - phpenv config-add .travis/php.ini
 
 before_script:
-  - if [[ $TRAVIS_PHP_VERSION != "7.1" ]]; then phpenv config-rm xdebug.ini; fi
+  - if [[ $TRAVIS_PHP_VERSION != "8.1" ]]; then phpenv config-rm xdebug.ini; fi
 
 script:
-  - if [[ $TRAVIS_PHP_VERSION == "7.1" ]]; then make test-coveralls; else make test; fi
+  - if [[ $TRAVIS_PHP_VERSION == "8.1" ]]; then make test-coveralls; else make test; fi

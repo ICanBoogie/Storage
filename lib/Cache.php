@@ -11,10 +11,13 @@
 
 namespace ICanBoogie\Storage;
 
+use IteratorAggregate;
+use Traversable;
+
 /**
  * An interface for classes implementing cache capabilities.
  */
-interface Cache extends \IteratorAggregate
+interface Cache extends IteratorAggregate
 {
 	/**
 	 * Checks if a key exists in a storage.
@@ -24,12 +27,12 @@ interface Cache extends \IteratorAggregate
 	/**
 	 * Retrieves a value.
 	 *
-	 * @return mixed|null The value associated with the key, or `null` if the key doesn't exists.
+	 * @return mixed The value associated with the key, or `null` if the key doesn't exists.
 	 */
-	public function retrieve(string $key);
+	public function retrieve(string $key): mixed;
 
 	/**
 	 * @inheritdoc
 	 */
-	public function getIterator(): iterable;
+	public function getIterator(): Traversable;
 }

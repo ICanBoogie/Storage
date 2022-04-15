@@ -21,7 +21,7 @@ class JSONAdapter implements Adapter
 	/**
 	 * @inheritdoc
 	 */
-	public function write(string $filename, $data): bool
+	public function write(string $filename, mixed $data): bool
 	{
 		return file_put_contents($filename, json_encode($data));
 	}
@@ -29,7 +29,7 @@ class JSONAdapter implements Adapter
 	/**
 	 * @inheritdoc
 	 */
-	public function read(string $filename)
+	public function read(string $filename): mixed
 	{
 		return json_decode(file_get_contents($filename), true);
 	}

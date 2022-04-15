@@ -202,14 +202,6 @@ interface and [StorageCollection][] class, they only provide read-only features.
 
 
 
-## Requirements
-
-The package requires PHP 7.1 or later.
-
-
-
-
-
 ## Installation
 
 The recommended way to install this package is through [Composer](http://getcomposer.org/):

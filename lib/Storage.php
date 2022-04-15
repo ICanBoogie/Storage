@@ -19,15 +19,18 @@ interface Storage extends Cache
 	/**
 	 * Stores a variable.
 	 *
-	 * @param string $key Store the variable using this name. keys are cache-unique, so storing
-	 * a second value with the same key will overwrite the original value.
-	 * @param mixed $value The value to store.
-	 * @param int $ttl Time To Live; store `value` in the cache for `ttl` seconds. After the
-	 * `ttl` has passed, the stored value won't be available for the next request. If no `ttl` is
-	 * supplied (or if the `ttl` is empty), the value will persist until it is removed from the
-	 * cache manually, or otherwise fails to exist in the cache.
+	 * @param string $key
+	 *     Store the variable using this name. keys are cache-unique, so storing
+	 *     a second value with the same key will overwrite the original value.
+	 * @param mixed $value
+	 *     The value to store.
+	 * @param int|null $ttl
+	 *     Time To Live; store `value` in the cache for `ttl` seconds. After the
+	 *     `ttl` has passed, the stored value won't be available for the next request. If no `ttl` is
+	 *     supplied (or if the `ttl` is empty), the value will persist until it is removed from the
+	 *     cache manually, or otherwise fails to exist in the cache.
 	 */
-	public function store(string $key, $value, int $ttl = null): void;
+	public function store(string $key, mixed $value, int $ttl = null): void;
 
 	/**
 	 * Removes a value and its key.

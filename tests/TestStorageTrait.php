@@ -9,14 +9,16 @@
  * file that was distributed with this source code.
  */
 
-namespace ICanBoogie\Storage;
+namespace Test\ICanBoogie\Storage;
+
+use ICanBoogie\Storage\Storage;
 
 /**
  * @property Storage $storage
  */
 trait TestStorageTrait
 {
-	public function test_storage()
+	public function test_storage(): void
 	{
 		$k1 = uniqid();
 		$v1 = uniqid();
@@ -49,7 +51,7 @@ trait TestStorageTrait
 		$this->assertNull($s->retrieve($k2));
 	}
 
-	public function test_store_with_ttl()
+	public function test_store_with_ttl(): void
 	{
 		$storage = $this->storage;
 		$storage->store($key = uniqid(), $value = uniqid(), $ttl = 1);
@@ -60,7 +62,7 @@ trait TestStorageTrait
 		$this->assertNull($storage->retrieve($key));
 	}
 
-	public function data_store_type()
+	public function data_store_type(): array
 	{
 		return [
 			'null' => [null],
@@ -77,7 +79,7 @@ trait TestStorageTrait
 	/**
 	 * @dataProvider data_store_type
 	 */
-	public function test_store_type($data)
+	public function test_store_type($data): void
 	{
 		$storage = $this->storage;
 
@@ -85,7 +87,7 @@ trait TestStorageTrait
 		$this->assertSame($data, $storage->retrieve('test'));
 	}
 
-	public function test_iterator()
+	public function test_iterator(): void
 	{
 		$s = $this->storage;
 		$j = 10;

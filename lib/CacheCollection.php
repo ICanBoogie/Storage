@@ -11,6 +11,8 @@
 
 namespace ICanBoogie\Storage;
 
+use Traversable;
+
 /**
  * A collection of {@link Cache} instances.
  */
@@ -19,7 +21,7 @@ class CacheCollection implements Cache
 	/**
 	 * @var Cache[]
 	 */
-	protected $collection = [];
+	protected array $collection = [];
 
 	/**
 	 * @param Cache[] $collection
@@ -34,10 +36,8 @@ class CacheCollection implements Cache
 	 */
 	public function exists(string $key): bool
 	{
-		foreach ($this->collection as $cache)
-		{
-			if ($cache->exists($key))
-			{
+		foreach ($this->collection as $cache) {
+			if ($cache->exists($key)) {
 				return true;
 			}
 		}
@@ -48,12 +48,10 @@ class CacheCollection implements Cache
 	/**
 	 * @inheritdoc
 	 */
-	public function retrieve(string $key)
+	public function retrieve(string $key): mixed
 	{
-		foreach ($this->collection as $cache)
-		{
-			if ($cache->exists($key))
-			{
+		foreach ($this->collection as $cache) {
+			if ($cache->exists($key)) {
 				return $cache->retrieve($key);
 			}
 		}
@@ -64,7 +62,7 @@ class CacheCollection implements Cache
 	/**
 	 * @inheritdoc
 	 */
-	public function getIterator(): iterable
+	public function getIterator(): Traversable
 	{
 		return reset($this->collection)->getIterator();
 	}
@@ -78,10 +76,8 @@ class CacheCollection implements Cache
 	 */
 	public function find_by_type(string $type): ?Cache
 	{
-		foreach ($this->collection as $cache)
-		{
-			if ($cache instanceof $type)
-			{
+		foreach ($this->collection as $cache) {
+			if ($cache instanceof $type) {
 				return $cache;
 			}
 		}

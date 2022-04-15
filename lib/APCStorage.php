@@ -11,10 +11,14 @@
 
 namespace ICanBoogie\Storage;
 
+use APCUIterator;
+use ArrayAccess;
+use Traversable;
+
 /**
  * A storage using APC.
  */
-class APCStorage implements Storage, \ArrayAccess
+class APCStorage implements Storage, ArrayAccess
 {
 	use Storage\ArrayAccess;
 
@@ -28,14 +32,11 @@ class APCStorage implements Storage, \ArrayAccess
 		return (extension_loaded('apc') || extension_loaded('apcu')) && ini_get('apc.enabled');
 	}
 
-	/**
-	 * @var string
-	 */
-	private $prefix;
+	private string $prefix;
 
 	public function __construct(string $prefix = null)
 	{
-		$this->prefix = $prefix ?: substr(sha1($_SERVER['DOCUMENT_ROOT']), 0, 8) . ':';
+		$this->prefix = $prefix ?? substr(sha1($_SERVER['DOCUMENT_ROOT']), 0, 8) . ':';
 	}
 
 	/**
@@ -49,7 +50,7 @@ class APCStorage implements Storage, \ArrayAccess
 	/**
 	 * @inheritdoc
 	 */
-	public function retrieve(string $key)
+	public function retrieve(string $key): mixed
 	{
 		$rc = apcu_fetch($this->prefix . $key, $success);
 
@@ -59,9 +60,9 @@ class APCStorage implements Storage, \ArrayAccess
 	/**
 	 * @inheritdoc
 	 */
-	public function store(string $key, $data, int $ttl = null): void
+	public function store(string $key, mixed $value, int $ttl = null): void
 	{
-		apcu_store($this->prefix . $key, $data, $ttl ?: 0);
+		apcu_store($this->prefix . $key, $value, $ttl ?: 0);
 	}
 
 	/**
@@ -83,12 +84,11 @@ class APCStorage implements Storage, \ArrayAccess
 	/**
 	 * @inheritdoc
 	 */
-	public function getIterator(): iterable
+	public function getIterator(): Traversable
 	{
 		$prefix_length = strlen($this->prefix);
 
-		foreach ($this->create_internal_iterator() as $key => $dummy)
-		{
+		foreach ($this->create_internal_iterator() as $key => $dummy) {
 			yield substr($key, $prefix_length);
 		}
 	}
@@ -96,8 +96,8 @@ class APCStorage implements Storage, \ArrayAccess
 	/**
 	 * Creates internal iterator.
 	 */
-	private function create_internal_iterator(): \APCUIterator
+	private function create_internal_iterator(): APCUIterator
 	{
-		return new \APCUIterator('/^' . preg_quote($this->prefix) . '/', APC_ITER_NONE);
+		return new APCUIterator('/^' . preg_quote($this->prefix) . '/', APC_ITER_NONE);
 	}
 }

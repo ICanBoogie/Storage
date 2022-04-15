@@ -9,20 +9,19 @@
  * file that was distributed with this source code.
  */
 
-namespace ICanBoogie\Storage;
+namespace Test\ICanBoogie\Storage;
 
+use ICanBoogie\Storage\RedisStorage;
+use ICanBoogie\Storage\Storage;
 use PHPUnit\Framework\TestCase;
 
 class RedisStorageTest extends TestCase
 {
 	use TestStorageTrait;
 
-	/**
-	 * @var Storage
-	 */
-	private $storage;
+	private Storage $storage;
 
-	public function setUp()
+	protected function setUp(): void
 	{
 		if (!class_exists('Redis'))
 		{

@@ -11,17 +11,19 @@
 
 namespace ICanBoogie\Storage;
 
+use ArrayAccess;
+
 /**
  * A collection of {@link Storage} instances.
  */
-class StorageCollection extends CacheCollection implements Storage, \ArrayAccess
+class StorageCollection extends CacheCollection implements Storage, ArrayAccess
 {
 	use Storage\ArrayAccess;
 
 	/**
 	 * @inheritdoc
 	 */
-	public function retrieve(string $key)
+	public function retrieve(string $key): mixed
 	{
 		/* @var $update Storage[] */
 
@@ -56,7 +58,7 @@ class StorageCollection extends CacheCollection implements Storage, \ArrayAccess
 	/**
 	 * @inheritdoc
 	 */
-	public function store(string $key, $value, int $ttl = null): void
+	public function store(string $key, mixed $value, int $ttl = null): void
 	{
 		$this->for_each(__FUNCTION__, func_get_args());
 	}
@@ -78,19 +80,7 @@ class StorageCollection extends CacheCollection implements Storage, \ArrayAccess
 	}
 
 	/**
-	 * @inheritdoc
-	 *
-	 * @return Storage|null
-	 */
-	public function find_by_type(string $type): ?Cache
-	{
-		return parent::find_by_type($type);
-	}
-
-	/**
 	 * Apply a same method to each storage instance in the collection.
-	 *
-	 * @param mixed[] $arguments
 	 */
 	private function for_each(string $method, array $arguments): void
 	{

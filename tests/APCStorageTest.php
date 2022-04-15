@@ -9,8 +9,10 @@
  * file that was distributed with this source code.
  */
 
-namespace ICanBoogie\Storage;
+namespace Test\ICanBoogie\Storage;
 
+use ICanBoogie\Storage\APCStorage;
+use ICanBoogie\Storage\Storage;
 use PHPUnit\Framework\TestCase;
 
 final class APCStorageTest extends TestCase
@@ -22,10 +24,9 @@ final class APCStorageTest extends TestCase
 	 */
 	private $storage;
 
-	protected function setUp()
+	protected function setUp(): void
 	{
-		if (!APCStorage::is_available())
-		{
+		if (!APCStorage::is_available()) {
 			$this->markTestSkipped('The APC or APCu extension is not available.');
 		}
 

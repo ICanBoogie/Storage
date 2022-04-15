@@ -21,7 +21,7 @@ class SerializeAdapter implements Adapter
 	/**
 	 * @inheritdoc
 	 */
-	public function write(string $filename, $data): bool
+	public function write(string $filename, mixed $data): bool
 	{
 		return file_put_contents($filename, serialize($data));
 	}
@@ -29,7 +29,7 @@ class SerializeAdapter implements Adapter
 	/**
 	 * @inheritdoc
 	 */
-	public function read(string $filename)
+	public function read(string $filename): mixed
 	{
 		return unserialize(file_get_contents($filename));
 	}

@@ -9,39 +9,29 @@
  * file that was distributed with this source code.
  */
 
-namespace ICanBoogie\Storage;
+namespace Test\ICanBoogie\Storage;
 
+use ICanBoogie\Storage\RedisStorage;
+use ICanBoogie\Storage\RunTimeStorage;
+use ICanBoogie\Storage\Storage;
+use ICanBoogie\Storage\StorageCollection;
+use Iterator;
 use PHPUnit\Framework\TestCase;
 
 class StorageCollectionTest extends TestCase
 {
 	use TestStorageTrait;
 
-	/**
-	 * @var StorageCollection
-	 */
-	private $s1;
+	private Storage $s1;
+	private Storage $s2;
+	private Storage $s3;
+	private StorageCollection $storage;
 
-	/**
-	 * @var StorageCollection
-	 */
-	private $s2;
-
-	/**
-	 * @var StorageCollection
-	 */
-	private $s3;
-
-	/**
-	 * @var StorageCollection
-	 */
-	private $storage;
-
-	public function setUp()
+	protected function setUp(): void
 	{
-		$this->s1 = $s1 = new RunTimeStorage;
-		$this->s2 = $s2 = new RunTimeStorage;
-		$this->s3 = $s3 = new RunTimeStorage;
+		$this->s1 = $s1 = new RunTimeStorage();
+		$this->s2 = $s2 = new RunTimeStorage();
+		$this->s3 = $s3 = new RunTimeStorage();
 		$this->storage = new StorageCollection([ $s1, $s2, $s3 ]);
 	}
 
@@ -54,8 +44,7 @@ class StorageCollectionTest extends TestCase
 
 		/* @var $storage Storage */
 
-		foreach([ $this->storage, $this->s1, $this->s2, $this->s3 ] as $storage)
-		{
+		foreach ([ $this->storage, $this->s1, $this->s2, $this->s3 ] as $storage) {
 			$this->assertTrue($storage->exists($key));
 			$this->assertSame($value, $storage->retrieve($key));
 		}
@@ -162,6 +151,6 @@ class StorageCollectionTest extends TestCase
 
 	public function test_iterator()
 	{
-		$this->assertInstanceOf(\Iterator::class, $this->storage->getIterator());
+		$this->assertInstanceOf(Iterator::class, $this->storage->getIterator());
 	}
 }

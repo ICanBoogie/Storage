@@ -22,11 +22,12 @@
 		"source": "https://github.com/ICanBoogie/Storage"
 	},
 	"require": {
-		"php": ">=7.1"
+		"php": ">=8.1"
 	},
 	"require-dev": {
 		"ext-json": "*",
-		"ext-apcu": "*"
+		"ext-apcu": "*",
+		"phpunit/phpunit": "^9.5"
 	},
 	"autoload": {
 		"psr-4": {
@@ -38,7 +39,7 @@
 	},
 	"autoload-dev": {
 		"psr-4": {
-			"ICanBoogie\\Storage\\": "tests/"
+			"Test\\ICanBoogie\\Storage\\": "tests/"
 		}
 	}
 }

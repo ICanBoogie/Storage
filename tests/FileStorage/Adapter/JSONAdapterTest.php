@@ -9,14 +9,17 @@
  * file that was distributed with this source code.
  */
 
-namespace ICanBoogie\Storage\FileStorage\Adapter;
+namespace Test\ICanBoogie\Storage\FileStorage\Adapter;
+
+use ICanBoogie\Storage\FileStorage\Adapter;
+use ICanBoogie\Storage\FileStorage\Adapter\JSONAdapter;
 
 class JSONAdapterTest extends TestCase
 {
 	/**
 	 * @inheritdoc
 	 */
-	protected function getAdapter()
+	protected function getAdapter(): Adapter
 	{
 		return new JSONAdapter();
 	}

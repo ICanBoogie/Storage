@@ -1,16 +1,14 @@
 <?php
 
-namespace ICanBoogie\Storage\FileStorage\Adapter;
+namespace Test\ICanBoogie\Storage\FileStorage\Adapter;
 
 use ICanBoogie\Storage\FileStorage\Adapter;
+
 use const ICanBoogie\Storage\SANDBOX_DIR;
 
 abstract class TestCase extends \PHPUnit\Framework\TestCase
 {
-	/**
-	 * @return Adapter
-	 */
-	abstract protected function getAdapter();
+	abstract protected function getAdapter(): Adapter;
 
 	public function testAdapter()
 	{

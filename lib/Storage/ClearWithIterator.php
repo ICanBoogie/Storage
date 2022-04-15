@@ -11,6 +11,8 @@
 
 namespace ICanBoogie\Storage\Storage;
 
+use Exception;
+
 /**
  * A trait for {@link \ICanBoogie\Storage\Storage} instances that are cleared using their iterator.
  */
@@ -19,6 +21,9 @@ trait ClearWithIterator
 	abstract public function eliminate(string $key): void;
 	abstract public function getIterator(): iterable;
 
+	/**
+	 * @throws Exception
+	 */
 	public function clear(): void
 	{
 		foreach ($this->getIterator() as $key)

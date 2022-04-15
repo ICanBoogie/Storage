@@ -1,7 +1,8 @@
 <?php
 
-namespace ICanBoogie\Storage;
+namespace Test\ICanBoogie\Storage;
 
+use ICanBoogie\Storage\FileStorage;
 use PHPUnit\Framework\TestCase;
 
 final class FileStorageTest extends TestCase
@@ -13,7 +14,7 @@ final class FileStorageTest extends TestCase
 	 */
 	private $storage;
 
-	public function setUp()
+	protected function setUp(): void
 	{
 		$this->storage = new FileStorage(__DIR__ . '/sandbox/' . uniqid());
 	}

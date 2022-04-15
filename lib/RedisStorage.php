@@ -11,42 +11,34 @@
 
 namespace ICanBoogie\Storage;
 
+use ArrayAccess;
+use Traversable;
+
 /**
  * A storage using Redis.
  */
-class RedisStorage implements Storage, \ArrayAccess
+final class RedisStorage implements Storage, ArrayAccess
 {
 	use Storage\ArrayAccess;
 	use Storage\ClearWithIterator;
 
 	/**
-	 * @var \Redis
-	 */
-	private $redis;
-
-	/**
-	 * @var string
-	 */
-	private $prefix;
-
-	/**
 	 * @param \Redis|mixed $redis
 	 */
-	public function __construct($redis, string $prefix)
-	{
-		$this->redis = $redis;
-		$this->prefix = $prefix;
+	public function __construct(
+		private $redis,
+		private readonly string $prefix
+	) {
 	}
 
 	/**
 	 * @inheritdoc
 	 */
-	public function retrieve(string $key)
+	public function retrieve(string $key): mixed
 	{
 		$value = $this->redis->get($this->prefix . $key);
 
-		if ($value === false)
-		{
+		if ($value === false) {
 			return null;
 		}
 
@@ -58,18 +50,17 @@ class RedisStorage implements Storage, \ArrayAccess
 	 */
 	public function exists(string $key): bool
 	{
-		return (bool) $this->redis->exists($this->prefix . $key);
+		return (bool)$this->redis->exists($this->prefix . $key);
 	}
 
 	/**
 	 * @inheritdoc
 	 */
-	public function store(string $key, $value, int $ttl = null): void
+	public function store(string $key, mixed $value, int $ttl = null): void
 	{
 		$key = $this->prefix . $key;
 
-		if ($ttl)
-		{
+		if ($ttl) {
 			$this->redis->set($key, serialize($value), $ttl);
 
 			return;
@@ -89,19 +80,16 @@ class RedisStorage implements Storage, \ArrayAccess
 	/**
 	 * @inheritdoc
 	 */
-	public function getIterator(): iterable
+	public function getIterator(): Traversable
 	{
 		$redis = $this->redis;
 		$prefix = $this->prefix;
 		$prefix_length = strlen($prefix);
 		$it = null;
 
-		while(($keys = $redis->scan($it)))
-		{
-			foreach ($keys as $internal_key)
-			{
-				if (strpos($internal_key, $prefix) !== 0)
-				{
+		while (($keys = $redis->scan($it))) {
+			foreach ($keys as $internal_key) {
+				if (!str_starts_with($internal_key, $prefix)) {
 					continue;
 				}
 

@@ -11,6 +11,8 @@
 
 namespace ICanBoogie\Storage\FileStorage;
 
+use DirectoryIterator;
+
 /**
  * Iterates through a file storage.
  *
@@ -20,12 +22,7 @@ namespace ICanBoogie\Storage\FileStorage;
  */
 class Iterator implements \Iterator
 {
-	/**
-	 * Iterator.
-	 *
-	 * @var \Iterator
-	 */
-	private $iterator;
+	private \Iterator $iterator;
 
 	public function __construct(\Iterator $iterator)
 	{
@@ -37,7 +34,7 @@ class Iterator implements \Iterator
 	 *
 	 * Dot files are skipped.
 	 */
-	public function current(): \DirectoryIterator
+	public function current(): DirectoryIterator
 	{
 		$file = $this->iterator->current();
 
@@ -51,27 +48,25 @@ class Iterator implements \Iterator
 		return $file;
 	}
 
-	public function next()
+	public function next(): void
 	{
 		$this->iterator->next();
 	}
 
 	/**
 	 * Returns the pathname of the key.
-	 *
-	 * @return string
 	 */
-	public function key()
+	public function key(): mixed
 	{
 		return $this->iterator->current()->getFilename();
 	}
 
-	public function valid()
+	public function valid(): bool
 	{
 		return $this->iterator->valid();
 	}
 
-	public function rewind()
+	public function rewind(): void
 	{
 		$this->iterator->rewind();
 	}
@@ -79,7 +74,7 @@ class Iterator implements \Iterator
 	/**
 	 * Deletes the key found by the iterator.
 	 */
-	public function delete()
+	public function delete(): void
 	{
 		foreach ($this->iterator as $file)
 		{

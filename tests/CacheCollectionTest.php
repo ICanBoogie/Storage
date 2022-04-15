@@ -9,22 +9,21 @@
  * file that was distributed with this source code.
  */
 
-namespace ICanBoogie\Storage;
+namespace Test\ICanBoogie\Storage;
 
+use ICanBoogie\Storage\Cache;
+use ICanBoogie\Storage\CacheCollection;
 use PHPUnit\Framework\TestCase;
 
 final class CacheCollectionTest extends TestCase
 {
-	/**
-	 * @var CacheCollection
-	 */
-	private $collection;
+	private CacheCollection $collection;
 
-	public function setUp()
+	protected function setUp(): void
 	{
 		$c1 = $this
 			->getMockBuilder(Cache::class)
-			->setMethods([ 'exists', 'retrieve' ])
+			->onlyMethods([ 'exists', 'retrieve' ])
 			->getMockForAbstractClass();
 		$c1
 			->expects($this->any())
@@ -45,7 +44,7 @@ final class CacheCollectionTest extends TestCase
 
 		$c2 = $this
 			->getMockBuilder(Cache::class)
-			->setMethods([ 'exists', 'retrieve' ])
+			->onlyMethods([ 'exists', 'retrieve' ])
 			->getMockForAbstractClass();
 		$c2
 			->expects($this->any())
@@ -66,7 +65,7 @@ final class CacheCollectionTest extends TestCase
 
 		$c3 = $this
 			->getMockBuilder(Cache::class)
-			->setMethods([ 'exists', 'retrieve' ])
+			->onlyMethods([ 'exists', 'retrieve' ])
 			->getMockForAbstractClass();
 		$c3
 			->expects($this->any())

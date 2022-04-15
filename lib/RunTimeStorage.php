@@ -11,22 +11,26 @@
 
 namespace ICanBoogie\Storage;
 
+use ArrayAccess;
+use ArrayIterator;
+use Traversable;
+
 /**
  * A storage that uses an array to store values.
  */
-class RunTimeStorage implements Storage, \ArrayAccess
+final class RunTimeStorage implements Storage, ArrayAccess
 {
 	use Storage\ArrayAccess;
 
 	/**
 	 * @var array<string, mixed>
 	 */
-	private $values = [];
+	private array $values = [];
 
 	/**
 	 * @var array<string, int|null>
 	 */
-	private $until = [];
+	private array $until = [];
 
 	/**
 	 * @inheritdoc
@@ -43,7 +47,7 @@ class RunTimeStorage implements Storage, \ArrayAccess
 	/**
 	 * @inheritdoc
 	 */
-	public function retrieve(string $key)
+	public function retrieve(string $key): mixed
 	{
 		return $this->exists($key) ? $this->values[$key] : null;
 	}
@@ -51,7 +55,7 @@ class RunTimeStorage implements Storage, \ArrayAccess
 	/**
 	 * @inheritdoc
 	 */
-	public function store(string $key, $value, int $ttl = null): void
+	public function store(string $key, mixed $value, int $ttl = null): void
 	{
 		$this->values[$key] = $value;
 		$this->until[$key] = time() + $ttl;
@@ -76,8 +80,8 @@ class RunTimeStorage implements Storage, \ArrayAccess
 	/**
 	 * @inheritdoc
 	 */
-	public function getIterator(): iterable
+	public function getIterator(): Traversable
 	{
-		return new \ArrayIterator(array_keys($this->values));
+		return new ArrayIterator(array_keys($this->values));
 	}
 }

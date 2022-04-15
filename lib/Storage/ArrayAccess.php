@@ -11,13 +11,15 @@
 
 namespace ICanBoogie\Storage\Storage;
 
+use Exception;
+
 /**
  * A trait for storage implementing {@link \ArrayAccess}.
  */
 trait ArrayAccess
 {
-	abstract public function store(string $key, $value, int $ttl = null);
-	abstract public function retrieve(string $key);
+	abstract public function store(string $key, mixed $value, int $ttl = null);
+	abstract public function retrieve(string $key): mixed;
 	abstract public function exists(string $key): bool;
 	abstract public function eliminate(string $key): void;
 
@@ -25,9 +27,10 @@ trait ArrayAccess
 	 * Alias to {@link store()}.
 	 *
 	 * @param string $key
-	 * @param mixed $value
+	 *
+	 * @throws Exception
 	 */
-	public function offsetSet($key, $value)
+	public function offsetSet(mixed $key, mixed $value): void
 	{
 		$this->store($key, $value);
 	}
@@ -36,10 +39,8 @@ trait ArrayAccess
 	 * Alias to {@link exists()}.
 	 *
 	 * @param string $key
-	 *
-	 * @return bool
 	 */
-	public function offsetExists($key)
+	public function offsetExists(mixed $key): bool
 	{
 		return $this->exists($key);
 	}
@@ -49,7 +50,7 @@ trait ArrayAccess
 	 *
 	 * @param string $key
 	 */
-	public function offsetUnset($key)
+	public function offsetUnset(mixed $key): void
 	{
 		$this->eliminate($key);
 	}
@@ -58,10 +59,8 @@ trait ArrayAccess
 	 * Alias to {@link retrieve()}.
 	 *
 	 * @param string $key
-	 *
-	 * @return mixed
 	 */
-	public function offsetGet($key)
+	public function offsetGet(mixed $key): mixed
 	{
 		return $this->retrieve($key);
 	}
