@@ -32,14 +32,14 @@
 	"autoload": {
 		"psr-4": {
 			"ICanBoogie\\Storage\\": "lib/"
-		},
-		"files": [
-			"polyfills.php"
-		]
+		}
 	},
 	"autoload-dev": {
 		"psr-4": {
 			"Test\\ICanBoogie\\Storage\\": "tests/"
-		}
+		},
+		"files": [
+			"lib/polyfills.php"
+		]
 	}
 }
