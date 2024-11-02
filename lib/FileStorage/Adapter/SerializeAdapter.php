@@ -18,19 +18,19 @@ use ICanBoogie\Storage\FileStorage\Adapter;
  */
 class SerializeAdapter implements Adapter
 {
-	/**
-	 * @inheritdoc
-	 */
-	public function write(string $filename, mixed $data): bool
-	{
-		return file_put_contents($filename, serialize($data));
-	}
+    /**
+     * @inheritdoc
+     */
+    public function write(string $filename, mixed $data): bool
+    {
+        return file_put_contents($filename, serialize($data));
+    }
 
-	/**
-	 * @inheritdoc
-	 */
-	public function read(string $filename): mixed
-	{
-		return unserialize(file_get_contents($filename));
-	}
+    /**
+     * @inheritdoc
+     */
+    public function read(string $filename): mixed
+    {
+        return unserialize(file_get_contents($filename));
+    }
 }

@@ -22,12 +22,12 @@
 		"source": "https://github.com/ICanBoogie/Storage"
 	},
 	"require": {
-		"php": ">=8.1"
+		"php": ">=8.2"
 	},
 	"require-dev": {
 		"ext-json": "*",
 		"ext-apcu": "*",
-		"phpunit/phpunit": "^9.5"
+		"phpunit/phpunit": "^11.4"
 	},
 	"autoload": {
 		"psr-4": {

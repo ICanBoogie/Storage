@@ -1,16 +1,35 @@
 ---
-version: "3.0"
 services:
-  app:
-    build: .
-    depends_on:
-    - redis
-    environment:
-      REDIS_HOST: redis
-    volumes:
-    - .:/app:delegated
-    - ~/.composer:/root/.composer
-    working_dir: /app
+  app82:
+    build:
+      context: .
+      args:
+        PHP_VERSION: "8.2"
+    depends_on: &dep
+      - redis
+    environment: &env
+      PHP_IDE_CONFIG: 'serverName=icanboogie-storage'
+      ICANBOOGIE_REDIS_HOST: redis
+      ICANBOOGIE_REDIS_PORT: 6379
+    volumes: &vol
+      - .:/app:delegated
+      - ~/.composer:/root/.composer:delegated
+  app83:
+    build:
+      context: .
+      args:
+        PHP_VERSION: "8.3"
+    depends_on: *dep
+    environment: *env
+    volumes: *vol
+  app84:
+    build:
+      context: .
+      args:
+        PHP_VERSION: "8.4.0RC3"
+    depends_on: *dep
+    environment: *env
+    volumes: *vol
 
   redis:
     image: redis:5.0-alpine

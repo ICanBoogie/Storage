@@ -19,20 +19,20 @@ use Traversable;
  */
 interface Cache extends IteratorAggregate
 {
-	/**
-	 * Checks if a key exists in a storage.
-	 */
-	public function exists(string $key): bool;
+    /**
+     * Checks if a key exists in a storage.
+     */
+    public function exists(string $key): bool;
 
-	/**
-	 * Retrieves a value.
-	 *
-	 * @return mixed The value associated with the key, or `null` if the key doesn't exists.
-	 */
-	public function retrieve(string $key): mixed;
+    /**
+     * Retrieves a value.
+     *
+     * @return mixed The value associated with the key, or `null` if the key doesn't exists.
+     */
+    public function retrieve(string $key): mixed;
 
-	/**
-	 * @inheritdoc
-	 */
-	public function getIterator(): Traversable;
+    /**
+     * @inheritdoc
+     */
+    public function getIterator(): Traversable;
 }

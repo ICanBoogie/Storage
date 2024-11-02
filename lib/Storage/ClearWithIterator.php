@@ -18,17 +18,17 @@ use Exception;
  */
 trait ClearWithIterator
 {
-	abstract public function eliminate(string $key): void;
-	abstract public function getIterator(): iterable;
+    abstract public function eliminate(string $key): void;
 
-	/**
-	 * @throws Exception
-	 */
-	public function clear(): void
-	{
-		foreach ($this->getIterator() as $key)
-		{
-			$this->eliminate($key);
-		}
-	}
+    abstract public function getIterator(): iterable;
+
+    /**
+     * @throws Exception
+     */
+    public function clear(): void
+    {
+        foreach ($this->getIterator() as $key) {
+            $this->eliminate($key);
+        }
+    }
 }

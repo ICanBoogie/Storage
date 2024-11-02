@@ -18,19 +18,19 @@ use ICanBoogie\Storage\FileStorage\Adapter;
  */
 class JSONAdapter implements Adapter
 {
-	/**
-	 * @inheritdoc
-	 */
-	public function write(string $filename, mixed $data): bool
-	{
-		return file_put_contents($filename, json_encode($data));
-	}
+    /**
+     * @inheritdoc
+     */
+    public function write(string $filename, mixed $data): bool
+    {
+        return file_put_contents($filename, json_encode($data));
+    }
 
-	/**
-	 * @inheritdoc
-	 */
-	public function read(string $filename): mixed
-	{
-		return json_decode(file_get_contents($filename), true);
-	}
+    /**
+     * @inheritdoc
+     */
+    public function read(string $filename): mixed
+    {
+        return json_decode(file_get_contents($filename), true);
+    }
 }

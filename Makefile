@@ -1,13 +1,8 @@
 # customization
 
-PACKAGE_NAME = icanboogie/storage
 PHPUNIT = vendor/bin/phpunit
 
 # do not edit the following lines
-
-.PHONY: usage
-usage:
-	@echo "test:  Runs the test suite.\ndoc:   Creates the documentation.\nclean: Removes the documentation, the dependencies and the Composer files."
 
 vendor:
 	@composer install
@@ -30,24 +25,27 @@ test-coverage: test-dependencies
 .PHONY: test-coveralls
 test-coveralls: test-dependencies
 	@mkdir -p build/logs
-	@$(PHPUNIT) --coverage-clover build/logs/clover.xml
+	@XDEBUG_MODE=coverage $(PHPUNIT) --coverage-clover build/logs/clover.xml
 
 .PHONY: test-container
-test-container:
-	@docker-compose run --rm app bash
+test-container: test-container-82
+
+.PHONY: test-container-82
+test-container-82:
+	@-docker-compose run --rm app82 bash
 	@docker-compose down -v
 
-.PHONY: doc
-doc: vendor
-	@mkdir -p build/docs
-	@apigen generate \
-	--source lib \
-	--destination build/docs/ \
-	--title "$(PACKAGE_NAME)" \
-	--template-theme "bootstrap"
+.PHONY: test-container-83
+test-container-83:
+	@-docker-compose run --rm app83 bash
+	@docker-compose down -v
 
-.PHONY: clean
-clean:
-	@rm -fR build
-	@rm -fR vendor
-	@rm -f composer.lock
+.PHONY: test-container-84
+test-container-84:
+	@-docker-compose run --rm app84 bash
+	@docker-compose down -v
+
+.PHONY: lint
+lint:
+	@XDEBUG_MODE=off phpcs -s
+	@XDEBUG_MODE=off vendor/bin/phpstan

@@ -18,75 +18,70 @@ use ArrayAccess;
  */
 class StorageCollection extends CacheCollection implements Storage, ArrayAccess
 {
-	use Storage\ArrayAccess;
+    use Storage\ArrayAccess;
 
-	/**
-	 * @inheritdoc
-	 */
-	public function retrieve(string $key): mixed
-	{
-		/* @var $update Storage[] */
+    /**
+     * @inheritdoc
+     */
+    public function retrieve(string $key): mixed
+    {
+        /* @var $update Storage[] */
 
-		$value = null;
-		$update = [];
+        $value = null;
+        $update = [];
 
-		foreach ($this->collection as $storage)
-		{
-			$value = $storage->retrieve($key);
+        foreach ($this->collection as $storage) {
+            $value = $storage->retrieve($key);
 
-			if ($value !== null)
-			{
-				break;
-			}
+            if ($value !== null) {
+                break;
+            }
 
-			$update[] = $storage;
-		}
+            $update[] = $storage;
+        }
 
-		if ($value === null)
-		{
-			return null;
-		}
+        if ($value === null) {
+            return null;
+        }
 
-		foreach ($update as $storage)
-		{
-			$storage->store($key, $value);
-		}
+        foreach ($update as $storage) {
+            $storage->store($key, $value);
+        }
 
-		return $value;
-	}
+        return $value;
+    }
 
-	/**
-	 * @inheritdoc
-	 */
-	public function store(string $key, mixed $value, int $ttl = null): void
-	{
-		$this->for_each(__FUNCTION__, func_get_args());
-	}
+    /**
+     * @inheritdoc
+     */
+    public function store(string $key, mixed $value, ?int $ttl = null): void
+    {
+        $this->for_each(__FUNCTION__, func_get_args());
+    }
 
-	/**
-	 * @inheritdoc
-	 */
-	public function eliminate(string $key): void
-	{
-		$this->for_each(__FUNCTION__, func_get_args());
-	}
+    /**
+     * @inheritdoc
+     */
+    public function eliminate(string $key): void
+    {
+        $this->for_each(__FUNCTION__, func_get_args());
+    }
 
-	/**
-	 * @inheritdoc
-	 */
-	public function clear(): void
-	{
-		$this->for_each(__FUNCTION__, func_get_args());
-	}
+    /**
+     * @inheritdoc
+     */
+    public function clear(): void
+    {
+        $this->for_each(__FUNCTION__, func_get_args());
+    }
 
-	/**
-	 * Apply a same method to each storage instance in the collection.
-	 */
-	private function for_each(string $method, array $arguments): void
-	{
-		foreach ($this->collection as $storage)
-		{
-			$storage->$method(...$arguments);
-		}
-	}
+    /**
+     * Apply a same method to each storage instance in the collection.
+     */
+    private function for_each(string $method, array $arguments): void
+    {
+        foreach ($this->collection as $storage) {
+            $storage->$method(...$arguments);
+        }
+    }
 }

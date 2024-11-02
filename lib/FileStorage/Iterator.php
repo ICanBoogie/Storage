@@ -22,63 +22,61 @@ use DirectoryIterator;
  */
 class Iterator implements \Iterator
 {
-	private \Iterator $iterator;
+    private \Iterator $iterator;
 
-	public function __construct(\Iterator $iterator)
-	{
-		$this->iterator = $iterator;
-	}
+    public function __construct(\Iterator $iterator)
+    {
+        $this->iterator = $iterator;
+    }
 
-	/**
-	 * Returns the directory iterator.
-	 *
-	 * Dot files are skipped.
-	 */
-	public function current(): DirectoryIterator
-	{
-		$file = $this->iterator->current();
+    /**
+     * Returns the directory iterator.
+     *
+     * Dot files are skipped.
+     */
+    public function current(): DirectoryIterator
+    {
+        $file = $this->iterator->current();
 
-		if ($file->isDot())
-		{
-			$this->iterator->next();
+        if ($file->isDot()) {
+            $this->iterator->next();
 
-			$file = $this->current();
-		}
+            $file = $this->current();
+        }
 
-		return $file;
-	}
+        return $file;
+    }
 
-	public function next(): void
-	{
-		$this->iterator->next();
-	}
+    public function next(): void
+    {
+        $this->iterator->next();
+    }
 
-	/**
-	 * Returns the pathname of the key.
-	 */
-	public function key(): mixed
-	{
-		return $this->iterator->current()->getFilename();
-	}
+    /**
+     * Returns the pathname of the key.
+     */
+    public function key(): mixed
+    {
+        return $this->iterator->current()->getFilename();
+    }
 
-	public function valid(): bool
-	{
-		return $this->iterator->valid();
-	}
+    public function valid(): bool
+    {
+        return $this->iterator->valid();
+    }
 
-	public function rewind(): void
-	{
-		$this->iterator->rewind();
-	}
+    public function rewind(): void
+    {
+        $this->iterator->rewind();
+    }
 
-	/**
-	 * Deletes the key found by the iterator.
-	 */
-	public function delete(): void
-	{
-		foreach ($this->iterator as $file)
-		{
-			unlink($file->getPathname());
-		}
-	}
+    /**
+     * Deletes the key found by the iterator.
+     */
+    public function delete(): void
+    {
+        foreach ($this->iterator as $file) {
+            unlink($file->getPathname());
+        }
+    }
 }

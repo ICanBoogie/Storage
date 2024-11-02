@@ -18,24 +18,24 @@ use ICanBoogie\Storage\FileStorage\Adapter;
  */
 class PHPAdapter implements Adapter
 {
-	/**
-	 * @inheritdoc
-	 */
-	public function write(string $filename, mixed $data): bool
-	{
-		$code = var_export($data, true);
-		$data = <<<EOT
+    /**
+     * @inheritdoc
+     */
+    public function write(string $filename, mixed $data): bool
+    {
+        $code = var_export($data, true);
+        $data = <<<EOT
 <?php return $code;
 EOT;
 
-		return file_put_contents($filename, $data);
-	}
+        return file_put_contents($filename, $data);
+    }
 
-	/**
-	 * @inheritdoc
-	 */
-	public function read(string $filename): mixed
-	{
-		return require $filename;
-	}
+    /**
+     * @inheritdoc
+     */
+    public function read(string $filename): mixed
+    {
+        return require $filename;
+    }
 }

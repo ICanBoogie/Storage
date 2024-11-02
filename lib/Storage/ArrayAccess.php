@@ -18,50 +18,53 @@ use Exception;
  */
 trait ArrayAccess
 {
-	abstract public function store(string $key, mixed $value, int $ttl = null);
-	abstract public function retrieve(string $key): mixed;
-	abstract public function exists(string $key): bool;
-	abstract public function eliminate(string $key): void;
+    abstract public function store(string $key, mixed $value, ?int $ttl = null);
 
-	/**
-	 * Alias to {@link store()}.
-	 *
-	 * @param string $key
-	 *
-	 * @throws Exception
-	 */
-	public function offsetSet(mixed $key, mixed $value): void
-	{
-		$this->store($key, $value);
-	}
+    abstract public function retrieve(string $key): mixed;
 
-	/**
-	 * Alias to {@link exists()}.
-	 *
-	 * @param string $key
-	 */
-	public function offsetExists(mixed $key): bool
-	{
-		return $this->exists($key);
-	}
+    abstract public function exists(string $key): bool;
 
-	/**
-	 * Alias to {@link eliminate()}.
-	 *
-	 * @param string $key
-	 */
-	public function offsetUnset(mixed $key): void
-	{
-		$this->eliminate($key);
-	}
+    abstract public function eliminate(string $key): void;
 
-	/**
-	 * Alias to {@link retrieve()}.
-	 *
-	 * @param string $key
-	 */
-	public function offsetGet(mixed $key): mixed
-	{
-		return $this->retrieve($key);
-	}
+    /**
+     * Alias to {@link store()}.
+     *
+     * @param string $key
+     *
+     * @throws Exception
+     */
+    public function offsetSet(mixed $key, mixed $value): void
+    {
+        $this->store($key, $value);
+    }
+
+    /**
+     * Alias to {@link exists()}.
+     *
+     * @param string $key
+     */
+    public function offsetExists(mixed $key): bool
+    {
+        return $this->exists($key);
+    }
+
+    /**
+     * Alias to {@link eliminate()}.
+     *
+     * @param string $key
+     */
+    public function offsetUnset(mixed $key): void
+    {
+        $this->eliminate($key);
+    }
+
+    /**
+     * Alias to {@link retrieve()}.
+     *
+     * @param string $key
+     */
+    public function offsetGet(mixed $key): mixed
+    {
+        return $this->retrieve($key);
+    }
 }
