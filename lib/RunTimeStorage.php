@@ -17,6 +17,9 @@ use Traversable;
 
 /**
  * A storage that uses an array to store values.
+ *
+ * @implements Storage<string, mixed>
+ * @implements ArrayAccess<string, mixed>
  */
 final class RunTimeStorage implements Storage, ArrayAccess
 {

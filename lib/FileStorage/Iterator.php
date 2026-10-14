@@ -12,6 +12,7 @@
 namespace ICanBoogie\Storage\FileStorage;
 
 use DirectoryIterator;
+use UnexpectedValueException;
 
 /**
  * Iterates through a file storage.
@@ -19,11 +20,19 @@ use DirectoryIterator;
  * The iterator is usually created using the {@link FileStorage::matching()} method.
  *
  * The iterator can also be used to delete matching keys.
+ *
+ * @implements \Iterator<string, DirectoryIterator>
  */
 class Iterator implements \Iterator
 {
+    /**
+     * @var \Iterator<mixed, mixed>
+     */
     private \Iterator $iterator;
 
+    /**
+     * @param \Iterator<mixed, mixed> $iterator An iterator of {@see DirectoryIterator}.
+     */
     public function __construct(\Iterator $iterator)
     {
         $this->iterator = $iterator;
@@ -36,7 +45,7 @@ class Iterator implements \Iterator
      */
     public function current(): DirectoryIterator
     {
-        $file = $this->iterator->current();
+        $file = $this->current_file();
 
         if ($file->isDot()) {
             $this->iterator->next();
@@ -54,10 +63,12 @@ class Iterator implements \Iterator
 
     /**
      * Returns the pathname of the key.
+     *
+     * @return string
      */
     public function key(): mixed
     {
-        return $this->iterator->current()->getFilename();
+        return $this->current_file()->getFilename();
     }
 
     public function valid(): bool
@@ -76,7 +87,20 @@ class Iterator implements \Iterator
     public function delete(): void
     {
         foreach ($this->iterator as $file) {
-            unlink($file->getPathname());
+            if ($file instanceof DirectoryIterator) {
+                unlink($file->getPathname());
+            }
         }
+    }
+
+    private function current_file(): DirectoryIterator
+    {
+        $file = $this->iterator->current();
+
+        if (!$file instanceof DirectoryIterator) {
+            throw new UnexpectedValueException("Expected a " . DirectoryIterator::class . ", got " . get_debug_type($file));
+        }
+
+        return $file;
     }
 }

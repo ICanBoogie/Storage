@@ -205,10 +205,11 @@ interface and [StorageCollection][] class, they only provide read-only features.
 
 ## Continuous Integration
 
-The project is continuously tested by [GitHub actions](https://github.com/ICanBoogie/<Name>/actions).
+The project is continuously tested by [GitHub Actions](https://github.com/ICanBoogie/Storage/actions).
 
-[![Tests](https://github.com/ICanBoogie/<Name>/actions/workflows/test.yml/badge.svg?branch=6.0)](https://github.com/ICanBoogie/<Name>/actions/workflows/test.yml)
-[![Code Style](https://github.com/ICanBoogie/<Name>/actions/workflows/code-style.yml/badge.svg?branch=6.0)](https://github.com/ICanBoogie/<Name>/actions/workflows/code-style.yml)
+[![Tests](https://github.com/ICanBoogie/Storage/actions/workflows/test.yml/badge.svg?branch=6.0)](https://github.com/ICanBoogie/Storage/actions/workflows/test.yml)
+[![Static Analysis](https://github.com/ICanBoogie/Storage/actions/workflows/static-analysis.yml/badge.svg?branch=6.0)](https://github.com/ICanBoogie/Storage/actions/workflows/static-analysis.yml)
+[![Code Style](https://github.com/ICanBoogie/Storage/actions/workflows/code-style.yml/badge.svg?branch=6.0)](https://github.com/ICanBoogie/Storage/actions/workflows/code-style.yml)
 
 
 

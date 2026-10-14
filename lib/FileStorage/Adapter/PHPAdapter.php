@@ -28,7 +28,7 @@ class PHPAdapter implements Adapter
 <?php return $code;
 EOT;
 
-        return file_put_contents($filename, $data);
+        return file_put_contents($filename, $data) !== false;
     }
 
     /**

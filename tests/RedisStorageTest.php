@@ -2,6 +2,7 @@
 
 namespace Test\ICanBoogie\Storage;
 
+use ArrayAccess;
 use ICanBoogie\Storage\RedisStorage;
 use ICanBoogie\Storage\Storage;
 use PHPUnit\Framework\TestCase;
@@ -10,7 +11,10 @@ class RedisStorageTest extends TestCase
 {
     use TestStorageTrait;
 
-    private Storage $storage;
+    /**
+     * @var Storage<string, mixed>&ArrayAccess<string, mixed>
+     */
+    private Storage&ArrayAccess $storage;
 
     protected function setUp(): void
     {
@@ -18,18 +22,14 @@ class RedisStorageTest extends TestCase
             $this->markTestSkipped('The Redis extension is not available.');
         }
 
-        if (!method_exists('Redis', 'scan')) {
-            $this->markTestSkipped('Redis::scan() is not defined.');
-        }
-
         $redis = new \Redis();
         $redis->connect(
             host: getenv('ICANBOOGIE_REDIS_HOST') ?: '127.0.0.1',
-            port: getenv('ICANBOOGIE_REDIS_PORT')
+            port: (int) (getenv('ICANBOOGIE_REDIS_PORT') ?: 6379)
         );
-        $version = $redis->info()['redis_version'];
+        $version = $redis->info()['redis_version'] ?? null;
 
-        if (version_compare($version, '2.8', '<')) {
+        if (!is_string($version) || version_compare($version, '2.8', '<')) {
             $this->markTestSkipped('The Redis v2.8 or later is required.');
         }
 

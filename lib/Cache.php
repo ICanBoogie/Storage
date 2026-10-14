@@ -16,6 +16,11 @@ use Traversable;
 
 /**
  * An interface for classes implementing cache capabilities.
+ *
+ * @template TKey of array-key
+ * @template TValue
+ *
+ * @extends IteratorAggregate<int, TKey>
  */
 interface Cache extends IteratorAggregate
 {
@@ -33,6 +38,8 @@ interface Cache extends IteratorAggregate
 
     /**
      * @inheritdoc
+     *
+     * @return Traversable<int, TKey> The keys of the cache.
      */
     public function getIterator(): Traversable;
 }

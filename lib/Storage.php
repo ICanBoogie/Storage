@@ -4,6 +4,11 @@ namespace ICanBoogie\Storage;
 
 /**
  * An interface for classes implementing storage capabilities.
+ *
+ * @template TKey of array-key
+ * @template TValue
+ *
+ * @extends Cache<TKey, TValue>
  */
 interface Storage extends Cache
 {

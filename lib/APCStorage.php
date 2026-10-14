@@ -8,6 +8,9 @@ use Traversable;
 
 /**
  * A storage using APC.
+ *
+ * @implements Storage<string, mixed>
+ * @implements ArrayAccess<string, mixed>
  */
 class APCStorage implements Storage, ArrayAccess
 {
@@ -27,7 +30,9 @@ class APCStorage implements Storage, ArrayAccess
 
     public function __construct(?string $prefix = null)
     {
-        $this->prefix = $prefix ?? substr(sha1($_SERVER['DOCUMENT_ROOT']), 0, 8) . ':';
+        $document_root = $_SERVER['DOCUMENT_ROOT'] ?? '';
+
+        $this->prefix = $prefix ?? substr(sha1(is_string($document_root) ? $document_root : ''), 0, 8) . ':';
     }
 
     /**

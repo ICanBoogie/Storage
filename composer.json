@@ -1,45 +1,46 @@
 {
-	"name": "icanboogie/storage",
-	"type": "library",
-	"description": "Store and retrieve values, using different/multiple storage backends.",
-	"keywords": [
-		"store",
-		"retrieve",
-		"cache"
-	],
-	"homepage": "https://icanboogie.org/",
-	"license": "BSD-3-Clause",
-	"authors": [
-		{
-			"name": "Olivier Laviale",
-			"email": "olivier.laviale@gmail.com",
-			"homepage": "https://olvlvl.com/",
-			"role": "Developer"
-		}
-	],
-	"support": {
-		"issues": "https://github.com/ICanBoogie/Storage/issues",
-		"source": "https://github.com/ICanBoogie/Storage"
-	},
-	"require": {
-		"php": ">=8.2"
-	},
-	"require-dev": {
-		"ext-json": "*",
-		"ext-apcu": "*",
-		"phpunit/phpunit": "^11.4"
-	},
-	"autoload": {
-		"psr-4": {
-			"ICanBoogie\\Storage\\": "lib/"
-		}
-	},
-	"autoload-dev": {
-		"psr-4": {
-			"Test\\ICanBoogie\\Storage\\": "tests/"
-		},
-		"files": [
-			"lib/polyfills.php"
-		]
-	}
+  "name": "icanboogie/storage",
+  "type": "library",
+  "description": "Store and retrieve values, using different/multiple storage backends.",
+  "keywords": [
+    "store",
+    "retrieve",
+    "cache"
+  ],
+  "homepage": "https://icanboogie.org/",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Olivier Laviale",
+      "email": "olivier.laviale@gmail.com",
+      "homepage": "https://olvlvl.com/",
+      "role": "Developer"
+    }
+  ],
+  "support": {
+    "issues": "https://github.com/ICanBoogie/Storage/issues",
+    "source": "https://github.com/ICanBoogie/Storage"
+  },
+  "require": {
+    "php": ">=8.2"
+  },
+  "require-dev": {
+    "ext-apcu": "*",
+    "ext-json": "*",
+    "phpstan/phpstan": "^2.3",
+    "phpunit/phpunit": "^11.4 || ^12.0 || ^13.4"
+  },
+  "autoload": {
+    "psr-4": {
+      "ICanBoogie\\Storage\\": "lib/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Test\\ICanBoogie\\Storage\\": "tests/"
+    }
+  },
+  "config": {
+    "sort-packages": true
+  }
 }

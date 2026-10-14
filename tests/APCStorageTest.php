@@ -2,6 +2,7 @@
 
 namespace Test\ICanBoogie\Storage;
 
+use ArrayAccess;
 use ICanBoogie\Storage\APCStorage;
 use ICanBoogie\Storage\Storage;
 use PHPUnit\Framework\TestCase;
@@ -10,7 +11,10 @@ final class APCStorageTest extends TestCase
 {
     use TestStorageTrait;
 
-    private Storage $storage;
+    /**
+     * @var Storage<string, mixed>&ArrayAccess<string, mixed>
+     */
+    private Storage&ArrayAccess $storage;
 
     protected function setUp(): void
     {

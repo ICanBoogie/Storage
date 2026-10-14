@@ -22,13 +22,16 @@ use Traversable;
 
 /**
  * A storage using the file system.
+ *
+ * @implements Storage<string, mixed>
+ * @implements ArrayAccess<string, mixed>
  */
 final class FileStorage implements Storage, ArrayAccess
 {
     use Storage\ArrayAccess;
     use Storage\ClearWithIterator;
 
-    private static bool $release_after = false;
+    private static ?bool $release_after = null;
 
     /**
      * Absolute path to the storage directory.
@@ -109,8 +112,7 @@ final class FileStorage implements Storage, ArrayAccess
             return;
         }
 
-        set_error_handler(function () {
-        });
+        set_error_handler(static fn(): bool => true);
 
         try {
             $this->safe_store($pathname, $value);
@@ -175,7 +177,7 @@ final class FileStorage implements Storage, ArrayAccess
     private function safe_store(string $pathname, mixed $value): void
     {
         $dir = dirname($pathname);
-        $uniqid = uniqid(mt_rand(), true);
+        $uniqid = uniqid((string) mt_rand(), true);
         $tmp_pathname = $dir . '/var-' . $uniqid;
         $garbage_pathname = $dir . '/garbage-var-' . $uniqid;
 
@@ -246,6 +248,8 @@ final class FileStorage implements Storage, ArrayAccess
 
     /**
      * Returns an iterator for the keys matching a specified regex.
+     *
+     * @return Iterator
      */
     public function matching(string $regex): iterable
     {
@@ -268,8 +272,7 @@ final class FileStorage implements Storage, ArrayAccess
         $path = $this->path;
 
         if (!file_exists($path)) {
-            set_error_handler(function () {
-            });
+            set_error_handler(static fn(): bool => true);
             mkdir($path, 0705, true);
             restore_error_handler();
         }

@@ -16,6 +16,9 @@ use Traversable;
 
 /**
  * A storage using Redis.
+ *
+ * @implements Storage<string, mixed>
+ * @implements ArrayAccess<string, mixed>
  */
 final class RedisStorage implements Storage, ArrayAccess
 {
@@ -23,7 +26,7 @@ final class RedisStorage implements Storage, ArrayAccess
     use Storage\ClearWithIterator;
 
     /**
-     * @param \Redis|mixed $redis
+     * @param \Redis $redis
      */
     public function __construct(
         private $redis,
@@ -38,7 +41,7 @@ final class RedisStorage implements Storage, ArrayAccess
     {
         $value = $this->redis->get($this->prefix . $key);
 
-        if ($value === false) {
+        if (!is_string($value)) {
             return null;
         }
 
@@ -61,7 +64,7 @@ final class RedisStorage implements Storage, ArrayAccess
         $key = $this->prefix . $key;
 
         if ($ttl) {
-            $this->redis->set($key, serialize($value), $ttl);
+            $this->redis->set($key, serialize($value), [ 'EX' => $ttl ]);
 
             return;
         }

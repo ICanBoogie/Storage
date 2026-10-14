@@ -23,7 +23,7 @@ class JSONAdapter implements Adapter
      */
     public function write(string $filename, mixed $data): bool
     {
-        return file_put_contents($filename, json_encode($data));
+        return file_put_contents($filename, json_encode($data)) !== false;
     }
 
     /**
@@ -31,6 +31,8 @@ class JSONAdapter implements Adapter
      */
     public function read(string $filename): mixed
     {
-        return json_decode(file_get_contents($filename), true);
+        $json = file_get_contents($filename);
+
+        return $json === false ? null : json_decode($json, true);
     }
 }

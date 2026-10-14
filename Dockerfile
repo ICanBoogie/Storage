@@ -1,18 +1,12 @@
 ARG PHP_VERSION=8.2
-FROM php:${PHP_VERSION}-cli-bookworm
+FROM php:${PHP_VERSION}-cli-trixie
 
 RUN <<-EOF
 	apt-get update
-	apt-get install -y autoconf pkg-config
+	apt-get install -y autoconf pkg-config unzip
 	pecl channel-update pecl.php.net
-	pecl install apcu
-	pecl install redis
-	docker-php-ext-enable opcache apcu redis
-
-	if [ "$PHP_VERSION" \< "8.4" ]; then
-		pecl install xdebug
-		docker-php-ext-enable xdebug
-	fi
+	pecl install xdebug
+	docker-php-ext-enable xdebug
 EOF
 
 RUN <<-EOF
@@ -22,10 +16,6 @@ RUN <<-EOF
 	xdebug.start_with_request=yes
 	SHELL
 
-	cat <<-SHELL >> /usr/local/etc/php/conf.d/docker-php-ext-apcu.ini
-	apc.enable_cli=On
-	SHELL
-
 	cat <<-SHELL >> /usr/local/etc/php/conf.d/php.ini
 	display_errors=On
 	error_reporting=E_ALL
@@ -33,18 +23,25 @@ RUN <<-EOF
 	SHELL
 EOF
 
+# composer
+
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 ENV COMPOSER_ALLOW_SUPERUSER 1
+ENV COMPOSER_HOME=/opt/composer
+ENV PATH="/opt/composer/vendor/bin:${PATH}"
+
+# lint
+
+RUN composer global require friendsofphp/php-cs-fixer
+
+# extensions required by the tests
 
 RUN <<-EOF
-	apt-get update
-	apt-get install unzip
-	curl -s https://raw.githubusercontent.com/composer/getcomposer.org/76a7060ccb93902cd7576b67264ad91c8a2700e2/web/installer | php -- --quiet
-	mv composer.phar /usr/local/bin/composer
-	cat <<-SHELL >> /root/.bashrc
-	export PATH="$HOME/.composer/vendor/bin:$PATH"
+	pecl install apcu
+	pecl install redis
+	docker-php-ext-enable apcu redis
+
+	cat <<-SHELL >> /usr/local/etc/php/conf.d/docker-php-ext-apcu.ini
+	apc.enable_cli=On
 	SHELL
 EOF
-
-RUN composer global require squizlabs/php_codesniffer
-
-WORKDIR app

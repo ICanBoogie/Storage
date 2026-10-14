@@ -16,17 +16,17 @@ final class FileStorageTest extends TestCase
         $this->storage = new FileStorage(__DIR__ . '/sandbox/' . uniqid());
     }
 
-    public function test_exists_undefined()
+    public function test_exists_undefined(): void
     {
         $this->assertFalse($this->storage->exists('undefined'));
     }
 
-    public function test_retrieve_undefined()
+    public function test_retrieve_undefined(): void
     {
         $this->assertNull($this->storage->retrieve('undefined'));
     }
 
-    public function test_store_simple()
+    public function test_store_simple(): void
     {
         $k = __FUNCTION__;
         $value = uniqid();
@@ -37,7 +37,7 @@ final class FileStorageTest extends TestCase
         $this->assertFalse($this->storage->exists($k));
     }
 
-    public function test_store_complex()
+    public function test_store_complex(): void
     {
         $k = __FUNCTION__;
         $value = [ uniqid(), uniqid(), uniqid() ];

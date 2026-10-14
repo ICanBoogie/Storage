@@ -2,11 +2,12 @@
 
 namespace Test\ICanBoogie\Storage;
 
+use ArrayAccess;
 use ICanBoogie\Storage\Storage;
 use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
- * @property Storage $storage
+ * @property Storage<string, mixed>&ArrayAccess<string, mixed> $storage
  */
 trait TestStorageTrait
 {
@@ -54,6 +55,9 @@ trait TestStorageTrait
         $this->assertNull($storage->retrieve($key));
     }
 
+    /**
+     * @return array<string, array{ mixed }>
+     */
     public static function data_store_type(): array
     {
         return [
@@ -69,7 +73,7 @@ trait TestStorageTrait
     }
 
     #[DataProvider('data_store_type')]
-    public function test_store_type($data): void
+    public function test_store_type(mixed $data): void
     {
         $storage = $this->storage;
 

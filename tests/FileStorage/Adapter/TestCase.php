@@ -10,7 +10,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 {
     abstract protected function getAdapter(): Adapter;
 
-    public function testAdapter()
+    public function testAdapter(): void
     {
         $data = [ uniqid() => uniqid() ];
         $adapter = $this->getAdapter();

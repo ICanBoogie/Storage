@@ -23,7 +23,7 @@ class SerializeAdapter implements Adapter
      */
     public function write(string $filename, mixed $data): bool
     {
-        return file_put_contents($filename, serialize($data));
+        return file_put_contents($filename, serialize($data)) !== false;
     }
 
     /**
@@ -31,6 +31,8 @@ class SerializeAdapter implements Adapter
      */
     public function read(string $filename): mixed
     {
-        return unserialize(file_get_contents($filename));
+        $data = file_get_contents($filename);
+
+        return $data === false ? null : unserialize($data);
     }
 }

@@ -15,6 +15,10 @@ use ArrayAccess;
 
 /**
  * A collection of {@link Storage} instances.
+ *
+ * @extends CacheCollection<Storage<string, mixed>>
+ * @implements Storage<string, mixed>
+ * @implements ArrayAccess<string, mixed>
  */
 class StorageCollection extends CacheCollection implements Storage, ArrayAccess
 {
@@ -25,8 +29,6 @@ class StorageCollection extends CacheCollection implements Storage, ArrayAccess
      */
     public function retrieve(string $key): mixed
     {
-        /* @var $update Storage[] */
-
         $value = null;
         $update = [];
 
@@ -77,6 +79,8 @@ class StorageCollection extends CacheCollection implements Storage, ArrayAccess
 
     /**
      * Apply a same method to each storage instance in the collection.
+     *
+     * @param array<mixed> $arguments
      */
     private function for_each(string $method, array $arguments): void
     {

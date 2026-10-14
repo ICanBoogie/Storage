@@ -20,6 +20,9 @@ trait ClearWithIterator
 {
     abstract public function eliminate(string $key): void;
 
+    /**
+     * @return iterable<mixed, string>
+     */
     abstract public function getIterator(): iterable;
 
     /**

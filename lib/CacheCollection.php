@@ -11,20 +11,25 @@
 
 namespace ICanBoogie\Storage;
 
+use EmptyIterator;
 use Traversable;
 
 /**
  * A collection of {@link Cache} instances.
+ *
+ * @template TCache of Cache<string, mixed>
+ *
+ * @implements Cache<string, mixed>
  */
 class CacheCollection implements Cache
 {
     /**
-     * @var Cache[]
+     * @var array<TCache>
      */
     protected array $collection = [];
 
     /**
-     * @param Cache[] $collection
+     * @param array<TCache> $collection
      */
     public function __construct(array $collection)
     {
@@ -64,7 +69,13 @@ class CacheCollection implements Cache
      */
     public function getIterator(): Traversable
     {
-        return reset($this->collection)->getIterator();
+        $first = reset($this->collection);
+
+        if ($first === false) {
+            return new EmptyIterator();
+        }
+
+        return $first->getIterator();
     }
 
     /**
@@ -72,7 +83,7 @@ class CacheCollection implements Cache
      *
      * @param string $type The class or interface of the storage to find.
      *
-     * @return Cache|null The cache matching the specified type or `null` if none match.
+     * @return TCache|null The cache matching the specified type or `null` if none match.
      */
     public function find_by_type(string $type): ?Cache
     {

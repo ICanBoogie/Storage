@@ -13,23 +13,21 @@ services:
       ICANBOOGIE_REDIS_PORT: 6379
     volumes: &vol
       - .:/app:delegated
-      - ~/.composer:/root/.composer:delegated
-  app83:
+      - composer-cache:/opt/composer/cache
+    working_dir: /app
+
+  app85:
     build:
       context: .
       args:
-        PHP_VERSION: "8.3"
+        PHP_VERSION: "8.5"
     depends_on: *dep
     environment: *env
     volumes: *vol
-  app84:
-    build:
-      context: .
-      args:
-        PHP_VERSION: "8.4.0RC3"
-    depends_on: *dep
-    environment: *env
-    volumes: *vol
+    working_dir: /app
 
   redis:
     image: redis:5.0-alpine
+
+volumes:
+  composer-cache: ~

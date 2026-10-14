@@ -13,8 +13,17 @@ class StorageCollectionTest extends TestCase
 {
     use TestStorageTrait;
 
+    /**
+     * @var Storage<string, mixed>
+     */
     private Storage $s1;
+    /**
+     * @var Storage<string, mixed>
+     */
     private Storage $s2;
+    /**
+     * @var Storage<string, mixed>
+     */
     private Storage $s3;
     private StorageCollection $storage;
 
@@ -26,7 +35,7 @@ class StorageCollectionTest extends TestCase
         $this->storage = new StorageCollection([ $s1, $s2, $s3 ]);
     }
 
-    public function test_store()
+    public function test_store(): void
     {
         $key = uniqid();
         $value = uniqid();
@@ -41,7 +50,7 @@ class StorageCollectionTest extends TestCase
         }
     }
 
-    public function test_update_up()
+    public function test_update_up(): void
     {
         $s1 = $this->s1;
         $s2 = $this->s2;
@@ -59,7 +68,7 @@ class StorageCollectionTest extends TestCase
         $this->assertSame($value, $s1->retrieve($key));
     }
 
-    public function test_eliminate()
+    public function test_eliminate(): void
     {
         $s1 = $this->s1;
         $s2 = $this->s2;
@@ -90,7 +99,7 @@ class StorageCollectionTest extends TestCase
         $this->assertSame($v3, $s3->retrieve($k3));
     }
 
-    public function test_clear()
+    public function test_clear(): void
     {
         $s1 = $this->s1;
         $s2 = $this->s2;
@@ -115,7 +124,7 @@ class StorageCollectionTest extends TestCase
         $this->assertFalse($s3->exists($k3));
     }
 
-    public function test_array_access()
+    public function test_array_access(): void
     {
         $collection = $this->storage;
         $k = uniqid();
@@ -130,17 +139,17 @@ class StorageCollectionTest extends TestCase
         $this->assertNull($collection[$k]);
     }
 
-    public function test_find_by_type()
+    public function test_find_by_type(): void
     {
         $this->assertSame($this->s1, $this->storage->find_by_type(RunTimeStorage::class));
     }
 
-    public function test_find_by_type_undefined()
+    public function test_find_by_type_undefined(): void
     {
         $this->assertNull($this->storage->find_by_type(RedisStorage::class));
     }
 
-    public function test_iterator()
+    public function test_iterator(): void
     {
         $this->assertInstanceOf(Iterator::class, $this->storage->getIterator());
     }

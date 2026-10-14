@@ -10,26 +10,24 @@ jobs:
     runs-on: ubuntu-latest
     services:
       redis:
-        # Docker Hub image
         image: redis
-        # Set health checks to wait until redis has started
         options: >-
           --health-cmd "redis-cli ping"
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
         ports:
-          # Maps port 6379 on service container to the host
           - 6379:6379
     strategy:
       matrix:
-        php-version:
-        - "8.2"
-        - "8.3"
-        - "8.4"
+        include:
+        - php-version: "8.2"
+          dependencies: lowest
+        - php-version: "8.5"
+          dependencies: highest
     steps:
     - name: Checkout
-      uses: actions/checkout@v4
+      uses: actions/checkout@v5
     - name: Install PHP
       uses: shivammathur/setup-php@v2
       with:
@@ -39,26 +37,25 @@ jobs:
         tools: composer:v2
         extensions: redis, apcu
     - name: Cache dependencies
-      uses: actions/cache@v4
+      uses: actions/cache@v6
       with:
         path: |
           ~/.composer/cache
           vendor
-        key: "php-${{ matrix.php-version }}"
-        restore-keys: "php-${{ matrix.php-version }}"
+        key: "php-${{ matrix.php-version }}-${{ matrix.dependencies }}-${{ hashFiles('composer.json') }}"
+        restore-keys: "php-${{ matrix.php-version }}-${{ matrix.dependencies }}-"
 
     - name: Install dependencies
-      run: composer install --no-interaction --no-progress
+      run: composer update --no-interaction --no-progress --prefer-stable ${{ matrix.dependencies == 'lowest' && '--prefer-lowest' || '' }}
 
     - name: Run PHPUnit
       run: make test-coveralls
       env:
-        ICANBOOGIE_STORAGE_REDIS_HOST: localhost
-        ICANBOOGIE_STORAGE_REDIS_PORT: 6379
-        ICANBOOGIE_STORAGE_CHECK_URL: 'yes'
+        ICANBOOGIE_REDIS_HOST: localhost
+        ICANBOOGIE_REDIS_PORT: 6379
 
     - name: Upload code coverage
-      if: ${{ matrix.php-version == '8.3' }}
+      if: ${{ matrix.dependencies == 'highest' }}
       env:
         COVERALLS_REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
